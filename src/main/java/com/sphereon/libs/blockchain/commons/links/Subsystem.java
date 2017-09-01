@@ -1,55 +1,83 @@
 package com.sphereon.libs.blockchain.commons.links;
 
+import com.sphereon.libs.blockchain.commons.RegistrationType;
+import com.sphereon.libs.blockchain.commons.RegistrationTypeRegistry;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public interface Subsystem {
     String getName();
 
-    List<EntryType> getRegisteredEntryTypes();
+    Impl registerDefaultRegistrations();
 
-    boolean isRegistered(EntryType entryType);
+    List<RegistrationType> getRegisteredEntryTypes();
+
+    boolean isRegistered(RegistrationType registrationType);
 
     boolean isRegistered();
 
 
-    enum Defaults implements Subsystem {
-        SHAREPOINT, ALFRESCO, FILE;
+    interface Default {
+        public static final Subsystem ALFRESCO = Impl.of("Alfreco").defaults(RegistrationType.Defaults.CHAIN_LINK, RegistrationType.Defaults.HASH, RegistrationType.Defaults.NODE_ID, RegistrationType.Defaults.SITE);
+        public static final Subsystem SHAREPOINT = Impl.of("Sharepoint").defaults(RegistrationType.Defaults.CHAIN_LINK, RegistrationType.Defaults.HASH, RegistrationType.Defaults.LIST, RegistrationType.Defaults.LIST_ITEM, RegistrationType.Defaults.SITE);
+        public static final Subsystem FILE = Impl.of("File").defaults(RegistrationType.Defaults.CHAIN_LINK, RegistrationType.Defaults.HASH, RegistrationType.Defaults.DOCUMENT_ID, RegistrationType.Defaults.CONTEXT, RegistrationType.Defaults.REMARK, RegistrationType.Defaults.ROOT);
+        public static final Subsystem CUSTOM = Impl.of("Custom").defaults(RegistrationType.Defaults.CHAIN_LINK, RegistrationType.Defaults.ROOT, RegistrationType.Defaults.CONTEXT, RegistrationType.Defaults.GENERAL, RegistrationType.Defaults.URL);
+    }
 
-        private List<EntryType> entryTypes = new ArrayList<>();
-        private boolean registered = false;
+    class Impl implements Subsystem {
+        private final String name;
+        private List<RegistrationType> registrationTypes = new ArrayList<>();
+        private RegistrationType[] defaults = new RegistrationType[]{};
 
-        protected Defaults register() {
-            this.registered = true;
-            return this;
+        public static Impl of(String name) {
+            return new Impl(name);
         }
 
-        protected Defaults register(EntryType entryType) {
-            if (!entryTypes.contains(entryType)) {
-                entryTypes.add(entryType);
-            }
-            return this;
+        protected Impl(String name) {
+            this.name = name;
         }
 
         @Override
         public String getName() {
-            return name();
+            return name;
         }
 
         @Override
-        public List<EntryType> getRegisteredEntryTypes() {
-            return Collections.unmodifiableList(entryTypes);
+        public Impl registerDefaultRegistrations() {
+            for (RegistrationType registrationType : defaults) {
+                register(registrationType);
+            }
+            return this;
+        }
+
+        public Impl register(RegistrationType registrationType) {
+            RegistrationTypeRegistry.getInstance().add(registrationType, this);
+            if (!registrationTypes.contains(registrationType)) {
+                registrationTypes.add(registrationType);
+            }
+            registrationType.register(this);
+            return this;
+        }
+
+        protected Impl defaults(RegistrationType... defaults) {
+            this.defaults = defaults;
+            return this;
         }
 
         @Override
-        public boolean isRegistered(EntryType entryType) {
-            return entryTypes.contains(entryType);
+        public List<RegistrationType> getRegisteredEntryTypes() {
+            return registrationTypes;
+        }
+
+        @Override
+        public boolean isRegistered(RegistrationType registrationType) {
+            return getRegisteredEntryTypes().contains(registrationType);
         }
 
         @Override
         public boolean isRegistered() {
-            return registered;
+            return !getRegisteredEntryTypes().isEmpty();
         }
     }
 }

@@ -1,8 +1,7 @@
-package com.sphereon.libs.blockchain.commons.links;
+package com.sphereon.libs.blockchain.commons;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -12,7 +11,6 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Created by niels on 3-7-2017.
  */
-@Component
 public class Digest {
     public enum Algorithm {
         SHA_256("SHA-256"), SHA_512("SHA-512");
@@ -37,6 +35,28 @@ public class Digest {
     public enum Encoding {
         UTF_8, HEX;
     }
+
+
+    private static volatile Digest instance;
+
+    private Digest() {
+    }
+
+    public static Digest getInstance() {
+        /*
+        We use double checked locking and a non final instance, since we do not know beforehand whether we operate
+        within a Sring context or not.  We also provide configuration support for the Spring singleton scope
+        */
+        if (instance == null) {
+            synchronized (Digest.class) {
+                if (instance == null) {
+                    Digest.instance = new Digest();
+                }
+            }
+        }
+        return instance;
+    }
+
 
     public byte[] getHash(Algorithm algorithm, String input) {
         if (StringUtils.isEmpty(input)) {

@@ -1,33 +1,48 @@
 package com.sphereon.libs.blockchain.commons.links;
 
+import com.sphereon.libs.blockchain.commons.RegistrationType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
 public enum Link {
-    NONE("%s"), CONTEXT("/%s"), CHAIN_ID("/%s/chains/%s", CONTEXT), ENTRY_ID("/%s/chains/%s/entries/%s", CHAIN_ID), EXTERNAL_ID("/%s/chains/%s/entries/%s/externalids/%s", ENTRY_ID), CONTENT("/%s/chains/%s/entries/%s/content", ENTRY_ID);
+    NONE(BlockhainType.NONE, "%s"),
+    CONTEXT(BlockhainType.CONTEXT, "/%s"),
+    CHAIN_ID(BlockhainType.CHAIN, "/%s/chains/%s", CONTEXT),
+    ENTRY_ID(BlockhainType.ENTRY, "/%s/chains/%s/entries/%s", CHAIN_ID),
+    EXTERNAL_ID(BlockhainType.EXTERNAL_ID, "/%s/chains/%s/entries/%s/externalids/%s", ENTRY_ID),
+    CONTENT(BlockhainType.CONTENT, "/%s/chains/%s/entries/%s/content", ENTRY_ID);
 
     private final Link parent;
+    private final BlockhainType type;
     private List<Link> children = new ArrayList<>();
 
     private String template;
 
-    Link(String template) {
+    Link(BlockhainType type, String template) {
+        this.type = type;
         this.template = template;
         this.parent = null;
     }
 
-    Link(String template, Link parent) {
+    Link(BlockhainType type, String template, Link parent) {
+        this.type = type;
         this.template = template;
         this.parent = parent;
         if (parent != null) {
             parent.children.add(this);
         }
     }
+
     protected String getTemplate() {
         return template;
     }
+
+    public BlockhainType getType() {
+        return type;
+    }
+
     public Link getParent() {
         return parent;
     }
@@ -44,26 +59,25 @@ public enum Link {
         return !CollectionUtils.isEmpty(children);
     }
 
-    public Builder newBuilder() {
-        return new Builder().start(this);
+    public Builder newBuilder(RegistrationType type) {
+        return new Builder(this, type);
     }
 
     public class Builder {
         private SortedMap<Link, String> parts;
+        private final RegistrationType type;
+        private final Link link;
 
-        private Builder() {
+        private Builder(Link link, RegistrationType type) {
             reset();
+            this.link = link;
+            this.type = type;
         }
 
         public Builder reset() {
             this.parts = new TreeMap<>();
             return this;
         }
-
-        public Builder start(Link link) {
-            return new Builder();
-        }
-
 
         public Builder none(String value) {
             add(NONE, value);
@@ -111,9 +125,28 @@ public enum Link {
             return this;
         }
 
-        public String build() {
+        public RegistrationType getType() {
+            return type;
+        }
+
+        public String getLinkTypeName() {
+            if (getType() == null) {
+                return null;
+            }
+            return getType().getName();
+        }
+
+        public String buildLinkKey() {
+            if (getType() != null && !RegistrationType.Defaults.CHAIN_LINK.equals(getType())) {
+                return RegistrationType.Defaults.CHAIN_LINK.getName() + ":" + getType().getName();
+            } else {
+                return RegistrationType.Defaults.CHAIN_LINK.getName();
+            }
+        }
+
+        public String buildTargetLink() {
             if (CollectionUtils.isEmpty(parts)) {
-                throw new RuntimeException("Cannot build link with no parts");
+                throw new RuntimeException("Cannot build Target link with no parts");
             }
             Link last = parts.lastKey();
             Link current = last;
@@ -132,8 +165,6 @@ public enum Link {
         public SortedMap<Link, String> getParts() {
             return new TreeMap<>(parts);
         }
-
-
 
 
     }
