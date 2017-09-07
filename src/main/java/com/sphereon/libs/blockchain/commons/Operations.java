@@ -222,7 +222,30 @@ public class Operations {
      * @param externalIds
      * @return
      */
+    public Result<byte[]> calculateEntryIdBaseFromBytes(String chainIdHex, byte[] entryData, Collection<byte[]> externalIds) {
+        // add entryData has is the whole entryData as a byte string.
+        // hash that with sha512
+        // append the entrybytes to that 512 hash
+        // hash that new byte array with sha256
+        Collection<HasValue.Impl<byte[]>> externalIdsValues = new ArrayList<>();
+        for (byte[] externalId : externalIds) {
+            HasValue.Impl<byte[]> value = HasValue.Impl.of(externalId);
+            externalIdsValues.add(value);
+        }
+        return calculateEntryIdBase(chainIdHex, HasContent.Impl.of(entryData), externalIdsValues);
+    }
 
+    /**
+     * An entryId base is calculated from the chain Id in hex form, the external Ids and the content of the entry!
+     * If the chainId in hex form is ommited it will be calculated as if it is the first entry in a chain
+     * This is not the entryId! It has to be hashed using SHA-256 using HEX encoding to retrieve the entryId.
+     * Use generateEntryId for one shot implementation
+     *
+     * @param chainIdHex
+     * @param entryData
+     * @param externalIds
+     * @return
+     */
     public Result<byte[]> calculateEntryIdBase(String chainIdHex, HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
         // add entryData has is the whole entryData as a byte string.
         // hash that with sha512
@@ -236,7 +259,6 @@ public class Operations {
     protected Result<byte[]> entryToBytes(HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
         return entryToBytes(null, entryData, externalIds);
     }
-
 
     protected Result<byte[]> entryToBytes(String chainIdHex, HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
         byte[] chainID;
@@ -256,7 +278,6 @@ public class Operations {
         }
         return new Result<>(bytes);
     }
-
 
     protected Result<byte[]> chainToBytes(HasContent<byte[]> firstEntryData, Collection<? extends HasValue<byte[]>> externalIds) {
         byte[] chainID = calculateChainIdBase(externalIds).byteHash(Digest.Algorithm.SHA_256);
@@ -286,7 +307,6 @@ public class Operations {
 
         return new Result<>(bytes);
     }
-
 
     public Result<byte[]> currentTimeMillis() {
         long now = System.currentTimeMillis();
