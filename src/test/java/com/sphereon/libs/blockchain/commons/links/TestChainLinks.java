@@ -34,7 +34,6 @@ public class TestChainLinks {
 
         Assert.assertEquals("ChainLink:NodeId", Link.EXTERNAL_ID.newBuilder(RegistrationType.Defaults.NODE_ID).buildLinkKey());
 
-
     }
 
 

@@ -6,8 +6,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
+import static com.sphereon.libs.blockchain.commons.RegistrationType.Defaults.CHAIN_LINK_KEY;
+
 public interface RegistrationType {
+
     String getLabel();
+
     RegistrationType setLabel(String label);
 
     String getName();
@@ -40,6 +44,7 @@ public interface RegistrationType {
         RegistrationType CASE_ID = Impl.of("CaseId").setLabel("Case Id");
         RegistrationType DOCUMENT_ID = Impl.of("DocumentId").setLabel("Document Id");
         RegistrationType GENERAL = Impl.of("General");
+        String CHAIN_LINK_KEY = "ChainLink" + ":";
 
     }
 
@@ -49,7 +54,7 @@ public interface RegistrationType {
         private List<Subsystem> subsystems = new ArrayList<>();
 
         public static RegistrationType of(String name) {
-            return new Impl(name);
+            return new Impl(stripChainLinkKey(name));
         }
 
         public static RegistrationType of(byte[] name) {
@@ -93,6 +98,10 @@ public interface RegistrationType {
             return this;
         }
 
+        public static String stripChainLinkKey(String input) {
+            return StringUtils.isEmpty(input) ? input : input.replaceFirst(RegistrationType.Defaults.CHAIN_LINK_KEY, "");
+        }
+
         @Override
         public String createChainLinkKey() {
             return Link.NONE.newBuilder(this).buildLinkKey();
@@ -111,7 +120,7 @@ public interface RegistrationType {
             String key = input.toLowerCase().trim();
             if (key.startsWith(Defaults.CHAIN_LINK.getName())) {
                 result.add(Defaults.CHAIN_LINK);
-                key = key.replaceFirst(Defaults.CHAIN_LINK.getName() + ":", "").trim();
+                key = key.replaceFirst(CHAIN_LINK_KEY, "").trim();
                 key = key.replaceFirst(Defaults.CHAIN_LINK.getName(), "").trim();
 
             }

@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.SortedMap;
+
 @RunWith(JUnit4.class)
 public class TestLinkBuilder {
     @Test
@@ -31,5 +33,41 @@ public class TestLinkBuilder {
         Assert.assertEquals(Link.EXTERNAL_ID, builder.getParts().lastKey());
         Assert.assertEquals("0", builder.getParts().get(Link.EXTERNAL_ID));
         Assert.assertEquals("ChainLink:Hash", builder.buildLinkKey());
+    }
+
+    @Test
+    public void parseLinks() {
+        final String link = "/context/chains/chain1/entries/entry1/externalids/0";
+        Assert.assertEquals(Link.EXTERNAL_ID, Link.parser().targetLinkType(link));
+        SortedMap<Link, String> parts = Link.parser().targetLinkParts(link);
+        Assert.assertEquals(4, parts.size());
+
+        Assert.assertEquals(Link.EXTERNAL_ID, parts.lastKey());
+        Assert.assertEquals("context", parts.get(Link.CONTEXT));
+        Assert.assertEquals("chain1", parts.get(Link.CHAIN_ID));
+        Assert.assertEquals("entry1", parts.get(Link.ENTRY_ID));
+        Assert.assertEquals("0", parts.get(Link.EXTERNAL_ID));
+
+        // Recheck building link again from parsed parts
+        Link.Builder builder = Link.EXTERNAL_ID.newBuilder(RegistrationType.Defaults.GENERAL).add(parts);
+        Assert.assertEquals(link, builder.buildTargetLink());
+
+
+        Assert.assertFalse(Link.parser().isLinkKey(null));
+        Assert.assertFalse(Link.parser().isLinkKey(""));
+
+        // Needs ChainLink: prefix
+        Assert.assertFalse(Link.parser().isLinkKey(RegistrationType.Defaults.CASE_ID.getName()));
+        Assert.assertFalse(Link.parser().isLinkKey(RegistrationType.Defaults.CHAIN_LINK.getName()));
+        Assert.assertTrue(Link.parser().isLinkKey(RegistrationType.Defaults.CHAIN_LINK_KEY));
+        Assert.assertTrue(Link.parser().isLinkKey(RegistrationType.Defaults.CHAIN_LINK_KEY + RegistrationType.Defaults.CASE_ID.getName()));
+
+        Assert.assertEquals("CaseId", Link.parser().linkKeyValue(RegistrationType.Defaults.CHAIN_LINK_KEY + RegistrationType.Defaults.CASE_ID.getName()));
+        Assert.assertEquals("Test", Link.parser().linkKeyValue(RegistrationType.Defaults.CHAIN_LINK_KEY + "Test"));
+        Assert.assertNull(Link.parser().linkKeyValue("Test"));
+
+
+
+
     }
 }

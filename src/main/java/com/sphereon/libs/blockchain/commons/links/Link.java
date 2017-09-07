@@ -63,6 +63,24 @@ public enum Link {
         return new Builder(this, type);
     }
 
+
+    private static int countSlashes(String input) {
+        int count = 0;
+        if (!StringUtils.isEmpty(input)) {
+            for (int i = 0; i < input.length(); i++) {
+                if (input.charAt(i) == '/') {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public static Parser parser() {
+        return new Parser();
+    }
+
+
     public class Builder {
         private SortedMap<Link, String> parts;
         private final RegistrationType type;
@@ -109,6 +127,16 @@ public enum Link {
             return this;
         }
 
+
+        public Builder add(SortedMap<Link, String> parts) {
+            if (CollectionUtils.isEmpty(parts)) {
+                return this;
+            }
+            for (Map.Entry<Link, String> entry : parts.entrySet()) {
+                add(entry.getKey(), entry.getValue());
+            }
+            return this;
+        }
 
         public Builder add(Link link, String value) {
             if (link == EXTERNAL_ID && !StringUtils.isNumeric(value)) {
@@ -175,5 +203,72 @@ public enum Link {
         }
 
 
+    }
+
+
+    public static class Parser {
+        public RegistrationType linkKeyType(String input) {
+            String val = linkKeyValue(input);
+            if (StringUtils.isEmpty(val)) {
+                if (isLinkKey(input)) {
+                    // Create on the fly
+                    return RegistrationType.Impl.of(input);
+                }
+                return null;
+            }
+            Set<RegistrationType> registrations = RegistrationType.Impl.from(input);
+
+            return registrations.size() == 0 ? null : (RegistrationType) registrations.toArray()[registrations.size()];
+        }
+
+        public String linkKeyValue(String input) {
+            if (!isLinkKey(input)) {
+                return null;
+            }
+            return RegistrationType.Impl.stripChainLinkKey(input);
+        }
+
+        public boolean isLinkKey(String input) {
+            return !StringUtils.isEmpty(input) && input.startsWith(RegistrationType.Defaults.CHAIN_LINK_KEY);
+        }
+
+        public Link targetLinkType(String input) {
+            return targetLinkParts(input).lastKey();
+        }
+
+        public String targetLinkPart(String input, Link link) {
+            return targetLinkParts(input).get(link);
+        }
+
+        public SortedMap<Link, String> targetLinkParts(String input) {
+            SortedMap<Link, String> parsed = new TreeMap<>();
+            if (StringUtils.isEmpty(input) || !input.startsWith("/")) {
+                parsed.put(NONE, input);
+                return parsed;
+            }
+            int inputSlashes = countSlashes(input);
+            for (Link link : Link.values()) {
+                int linkSlashes = countSlashes(link.getTemplate());
+                if (link == NONE) {
+                    if (inputSlashes == 0) {
+                        parsed.put(NONE, input);
+                        break;
+                    }
+                } else if (linkSlashes <= inputSlashes) {
+                    if (!input.endsWith("/content") && link.getTemplate().endsWith("/content")) {
+                        continue;
+                    }
+
+                    String result = input;
+                    for (int i = 0; i < linkSlashes; i++) {
+                        result = result.replaceFirst("[^/]*/", "");
+                    }
+                    parsed.put(link, result.replaceAll("/[^/]*", ""));
+                }
+            }
+
+
+            return parsed;
+        }
     }
 }
