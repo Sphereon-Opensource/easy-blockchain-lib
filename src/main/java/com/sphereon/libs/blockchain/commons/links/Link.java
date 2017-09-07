@@ -144,6 +144,10 @@ public enum Link {
             }
         }
 
+        public byte[] buildLinkKeyasBytes() {
+            return buildLinkKey().getBytes();
+        }
+
         public String buildTargetLink() {
             if (CollectionUtils.isEmpty(parts)) {
                 throw new RuntimeException("Cannot build Target link with no parts");
@@ -160,6 +164,10 @@ public enum Link {
             }
             String[] values = parts.values().toArray(new String[0]);
             return String.format(last.template, values);
+        }
+
+        public byte[] buildTargetLinkasBytes() {
+            return buildTargetLink().getBytes();
         }
 
         public SortedMap<Link, String> getParts() {

@@ -60,7 +60,7 @@ public interface Subsystem {
             return this;
         }
 
-        protected Impl defaults(RegistrationType... defaults) {
+        public Impl defaults(RegistrationType... defaults) {
             this.defaults = defaults;
             return this;
         }

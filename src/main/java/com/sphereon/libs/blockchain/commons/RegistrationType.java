@@ -7,7 +7,12 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
 public interface RegistrationType {
+    String getLabel();
+    RegistrationType setLabel(String label);
+
     String getName();
+
+    byte[] getNameInBytes();
 
     boolean isRegistered();
 
@@ -22,8 +27,8 @@ public interface RegistrationType {
     boolean isChainLink(String key);
 
     interface Defaults {
-        RegistrationType CHAIN_LINK = Impl.of("ChainLink");
-        RegistrationType HASH = Impl.of("Hash");
+        RegistrationType CHAIN_LINK = Impl.of("ChainLink").setLabel("Chain link");
+        RegistrationType HASH = Impl.of("Hash").setLabel("File/content hash");
         RegistrationType LIST = Impl.of("List");
         RegistrationType LIST_ITEM = Impl.of("ListItem");
         RegistrationType NODE_ID = Impl.of("NodeId");
@@ -32,18 +37,23 @@ public interface RegistrationType {
         RegistrationType ROOT = Impl.of("Root");
         RegistrationType URL = Impl.of("URL");
         RegistrationType REMARK = Impl.of("Remark");
-        RegistrationType CASE_ID = Impl.of("CaseId");
-        RegistrationType DOCUMENT_ID = Impl.of("DocumentId");
+        RegistrationType CASE_ID = Impl.of("CaseId").setLabel("Case Id");
+        RegistrationType DOCUMENT_ID = Impl.of("DocumentId").setLabel("Document Id");
         RegistrationType GENERAL = Impl.of("General");
 
     }
 
     class Impl implements RegistrationType {
         private final String name;
+        private String label;
         private List<Subsystem> subsystems = new ArrayList<>();
 
         public static RegistrationType of(String name) {
             return new Impl(name);
+        }
+
+        public static RegistrationType of(byte[] name) {
+            return of(new String(name));
         }
 
         protected Impl(String name) {
@@ -53,6 +63,11 @@ public interface RegistrationType {
         @Override
         public String getName() {
             return name;
+        }
+
+        @Override
+        public byte[] getNameInBytes() {
+            return getName() == null ? null : getName().getBytes();
         }
 
         @Override
@@ -106,6 +121,18 @@ public interface RegistrationType {
                 }
             }
             return result;
+        }
+
+        public String getLabel() {
+            if (label == null) {
+                return getName();
+            }
+            return label;
+        }
+
+        public Impl setLabel(String label) {
+            this.label = label;
+            return this;
         }
     }
 }
