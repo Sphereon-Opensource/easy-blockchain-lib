@@ -221,6 +221,14 @@ public enum Link {
             return registrations.size() == 0 ? null : (RegistrationType) registrations.toArray()[registrations.size()];
         }
 
+        public String linkKeyValueOrInput(String input) {
+            String linkKeyValue = linkKeyValue(input);
+            if (StringUtils.isEmpty(linkKeyValue)) {
+                linkKeyValue = input;
+            }
+            return linkKeyValue;
+        }
+
         public String linkKeyValue(String input) {
             if (!isLinkKey(input)) {
                 return null;

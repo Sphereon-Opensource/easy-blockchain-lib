@@ -132,6 +132,14 @@ public interface RegistrationType {
             return result;
         }
 
+
+     /*   public String getLabel(String input) {
+            if (isChainLink(input)) {
+                return getLabel() + " " + CHAIN_LINK.getLabel();
+            }
+            return getLabel();
+        }*/
+
         public String getLabel() {
             if (label == null) {
                 return getName();

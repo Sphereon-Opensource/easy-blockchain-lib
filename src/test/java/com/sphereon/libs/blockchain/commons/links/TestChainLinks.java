@@ -21,6 +21,7 @@ public class TestChainLinks {
     public void testAlfrescoRegistration() {
         registry.initSubsystem(Subsystem.Default.ALFRESCO);
         Assert.assertTrue(registry.contains(RegistrationType.Defaults.CHAIN_LINK, Subsystem.Default.ALFRESCO));
+
         Assert.assertTrue(registry.contains(RegistrationType.Defaults.SITE, Subsystem.Default.ALFRESCO));
         Assert.assertTrue(registry.contains(RegistrationType.Defaults.NODE_ID, Subsystem.Default.ALFRESCO));
         Assert.assertTrue(registry.contains(RegistrationType.Defaults.HASH, Subsystem.Default.ALFRESCO));
@@ -33,6 +34,8 @@ public class TestChainLinks {
         Assert.assertTrue(RegistrationType.Defaults.HASH.isChainLink(RegistrationType.Defaults.HASH.createChainLinkKey()));
 
         Assert.assertEquals("ChainLink:NodeId", Link.EXTERNAL_ID.newBuilder(RegistrationType.Defaults.NODE_ID).buildLinkKey());
+
+        Assert.assertEquals(RegistrationType.Defaults.NODE_ID, registry.get(RegistrationType.Defaults.CHAIN_LINK_KEY + RegistrationType.Defaults.NODE_ID.getName()));
 
     }
 

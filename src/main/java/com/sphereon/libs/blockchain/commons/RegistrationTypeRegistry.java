@@ -27,6 +27,7 @@ public class RegistrationTypeRegistry {
         }
         RegistrationType registrationType = registrationTypes.get(name);
         if (registrationType == null) {
+            name = RegistrationType.Impl.stripChainLinkKey(name);
             for (Map.Entry<String, RegistrationType> entry : registrationTypes.entrySet()) {
                 if (name.equalsIgnoreCase(entry.getKey()) || name.equalsIgnoreCase(entry.getValue().getName())) {
                     registrationType = entry.getValue();

@@ -65,6 +65,7 @@ public class TestLinkBuilder {
         Assert.assertEquals("CaseId", Link.parser().linkKeyValue(RegistrationType.Defaults.CHAIN_LINK_KEY + RegistrationType.Defaults.CASE_ID.getName()));
         Assert.assertEquals("Test", Link.parser().linkKeyValue(RegistrationType.Defaults.CHAIN_LINK_KEY + "Test"));
         Assert.assertNull(Link.parser().linkKeyValue("Test"));
+        Assert.assertEquals("Test", Link.parser().linkKeyValueOrInput("Test"));
 
 
 
