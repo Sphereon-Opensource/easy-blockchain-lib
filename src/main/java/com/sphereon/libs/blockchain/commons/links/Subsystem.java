@@ -79,5 +79,20 @@ public interface Subsystem {
         public boolean isRegistered() {
             return !getRegisteredEntryTypes().isEmpty();
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) { return true; }
+            if (!(o instanceof Impl)) { return false; }
+
+            Impl subsystem = (Impl) o;
+
+            return getName() != null ? getName().equals(subsystem.getName()) : subsystem.getName() == null;
+        }
+
+        @Override
+        public int hashCode() {
+            return getName() != null ? getName().hashCode() : 0;
+        }
     }
 }

@@ -151,5 +151,23 @@ public interface RegistrationType {
             this.label = label;
             return this;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) { return true; }
+            if (!(o instanceof Impl)) { return false; }
+
+            Impl that = (Impl) o;
+
+            if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) { return false; }
+            return getLabel() != null ? getLabel().equals(that.getLabel()) : that.getLabel() == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = getName() != null ? getName().hashCode() : 0;
+            result = 31 * result + (getLabel() != null ? getLabel().hashCode() : 0);
+            return result;
+        }
     }
 }
