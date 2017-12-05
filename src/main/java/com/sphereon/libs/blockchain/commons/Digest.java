@@ -3,7 +3,9 @@ package com.sphereon.libs.blockchain.commons;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -12,17 +14,23 @@ import java.security.NoSuchAlgorithmException;
  * Created by niels on 3-7-2017.
  */
 public class Digest {
+
+    public static final int BUFFERSIZE_1M = 1048576;
+
     public enum Algorithm {
         SHA_256("SHA-256"), SHA_512("SHA-512");
         private final String algorithm;
+
 
         Algorithm(String algorithm) {
             this.algorithm = algorithm;
         }
 
+
         public String getImplementation() {
             return algorithm;
         }
+
 
         public static Algorithm from(String value) {
             if (!StringUtils.isEmpty(value) && value.contains("512")) {
@@ -39,8 +47,10 @@ public class Digest {
 
     private static volatile Digest instance;
 
+
     private Digest() {
     }
+
 
     public static Digest getInstance() {
         /*
@@ -65,6 +75,7 @@ public class Digest {
         return getHash(algorithm, input.getBytes());
     }
 
+
     public byte[] getHash(Algorithm algorithm, byte[] input) {
         try {
             return MessageDigest.getInstance(algorithm.getImplementation()).digest(input);
@@ -73,13 +84,30 @@ public class Digest {
         }
     }
 
+
+    public byte[] getHash(Algorithm algorithm, InputStream inputStream) {
+        try {
+            byte[] buffer = new byte[BUFFERSIZE_1M];
+            MessageDigest messageDigest = MessageDigest.getInstance(algorithm.getImplementation());
+            try (DigestInputStream dis = new DigestInputStream(inputStream, messageDigest)) {
+                while (dis.read(buffer) != -1);
+            }
+            return messageDigest.digest();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+
     public byte[] getSHA256Hash(byte[] base) {
         return getHash(Algorithm.SHA_256, base);
     }
 
+
     public byte[] getSHA512Hash(byte[] base) {
         return getHash(Algorithm.SHA_512, base);
     }
+
 
     public String getHashAsString(Algorithm algorithm, String input, Encoding encoding) {
         if (StringUtils.isEmpty(input)) {
@@ -88,6 +116,7 @@ public class Digest {
         return getHashAsString(algorithm, input.getBytes(), encoding);
 
     }
+
 
     public String getHashAsString(Algorithm algorithm, byte[] input, Encoding encoding) {
         byte[] hash = getHash(algorithm, input);
