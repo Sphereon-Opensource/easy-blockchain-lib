@@ -31,6 +31,7 @@ public interface RegistrationType {
     boolean isChainLink(String key);
 
     interface Defaults {
+        RegistrationType CHAIN_TYPE = Impl.of("ChainType").setLabel("Chain type");
         RegistrationType CHAIN_LINK = Impl.of("ChainLink").setLabel("Chain link");
         RegistrationType HASH = Impl.of("Hash").setLabel("File/content hash");
         RegistrationType LIST = Impl.of("List");
