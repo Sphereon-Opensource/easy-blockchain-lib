@@ -25,7 +25,11 @@ public class TestLinkBuilder {
     public void buildExternalIdLink() {
         Link externalIdLink = Link.EXTERNAL_ID;
         String externalIdTemplate = externalIdLink.getTemplate();
-        Link.Builder builder = externalIdLink.newBuilder(RegistrationType.Defaults.HASH).context("context").chainId("chain1").entryId("entry1").externalId(0);
+        Link.Builder builder = externalIdLink
+                .newBuilder(RegistrationType.Defaults.HASH)
+                .context("context")
+                .chainId("chain1")
+                .entryId("entry1").externalId(0);
         Assert.assertEquals("/context/chains/chain1/entries/entry1/externalids/0", builder.buildTargetLink());
         Assert.assertEquals(4, builder.getParts().size());
         Assert.assertEquals(Link.CONTEXT, builder.getParts().firstKey());

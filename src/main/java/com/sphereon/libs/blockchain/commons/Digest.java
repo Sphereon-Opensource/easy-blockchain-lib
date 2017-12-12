@@ -15,7 +15,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Digest {
 
-    public static final int BUFFERSIZE_1M = 1048576;
+    public static final int BUFFER_SIZE_8K = 8192;
 
     public enum Algorithm {
         SHA_256("SHA-256"), SHA_512("SHA-512");
@@ -87,10 +87,11 @@ public class Digest {
 
     public byte[] getHash(Algorithm algorithm, InputStream inputStream) {
         try {
-            byte[] buffer = new byte[BUFFERSIZE_1M];
+            byte[] buffer = new byte[BUFFER_SIZE_8K];
             MessageDigest messageDigest = MessageDigest.getInstance(algorithm.getImplementation());
             try (DigestInputStream dis = new DigestInputStream(inputStream, messageDigest)) {
-                while (dis.read(buffer) != -1);
+                while (dis.read(buffer) != -1)
+                    ;
             }
             return messageDigest.digest();
         } catch (Exception e) {
