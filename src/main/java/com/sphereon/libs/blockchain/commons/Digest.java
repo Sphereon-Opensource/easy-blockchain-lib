@@ -85,6 +85,12 @@ public class Digest {
     }
 
 
+    public byte[] getHashInHexFormat(Algorithm algorithm, InputStream inputStream) {
+        byte[] hash = getHash(algorithm, inputStream);
+        return Hex.encodeHexString(hash).getBytes();
+    }
+
+
     public byte[] getHash(Algorithm algorithm, InputStream inputStream) {
         try {
             byte[] buffer = new byte[BUFFER_SIZE_8K];

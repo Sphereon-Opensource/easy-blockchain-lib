@@ -31,7 +31,6 @@ public interface RegistrationType {
     boolean isChainLink(String key);
 
     interface Defaults {
-        RegistrationType CHAIN_TYPE = Impl.of("ChainType").setLabel("Chain type");
         RegistrationType CHAIN_LINK = Impl.of("ChainLink").setLabel("Chain link");
         RegistrationType HASH = Impl.of("Hash").setLabel("File/content hash");
         RegistrationType LIST = Impl.of("List");
@@ -44,7 +43,6 @@ public interface RegistrationType {
         RegistrationType REMARK = Impl.of("Remark");
         RegistrationType CASE_ID = Impl.of("CaseId").setLabel("Case Id");
         RegistrationType DOCUMENT_ID = Impl.of("DocumentId").setLabel("Document Id");
-        RegistrationType CHAIN_TYPE = Impl.of("ChainType").setLabel("Chain type");
         RegistrationType GENERAL = Impl.of("General");
         String CHAIN_LINK_KEY = "ChainLink" + ":";
 
