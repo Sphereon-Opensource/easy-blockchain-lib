@@ -38,6 +38,10 @@ public class Operations {
         return concat(first.original(), append.original());
     }
 
+    public Result<byte[]> concat(Result<byte[]> first, byte[] append) {
+        return concat(first.original(), append);
+    }
+
     /**
      * Convatenate two byte arrays
      *
@@ -256,11 +260,11 @@ public class Operations {
     }
 
 
-    protected Result<byte[]> entryToBytes(HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
+    public Result<byte[]> entryToBytes(HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
         return entryToBytes(null, entryData, externalIds);
     }
 
-    protected Result<byte[]> entryToBytes(String chainIdHex, HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
+    public Result<byte[]> entryToBytes(String chainIdHex, HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
         byte[] chainID;
         if (!StringUtils.isEmpty(chainIdHex)) {
             chainID = fromHex(chainIdHex).original();
