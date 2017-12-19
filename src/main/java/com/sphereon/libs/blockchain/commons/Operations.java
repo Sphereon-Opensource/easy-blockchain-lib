@@ -205,6 +205,10 @@ public class Operations {
         return calculateChainIdBase(externalIds).stringHash(Digest.Algorithm.SHA_256, Digest.Encoding.HEX);
     }
 
+    public String generateChainIdFromValues(Collection<byte[]> externalIdValues) {
+        return generateChainId(convertToHasValues(externalIdValues));
+    }
+
 
     /**
      * The first entryId of a chain is calculated from the external Ids and the content of the entry!
@@ -216,6 +220,10 @@ public class Operations {
      */
     public String generateFirstEntryID(HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
         return calculateEntryIdBase(null, entryData, externalIds).stringHash(Digest.Algorithm.SHA_256, Digest.Encoding.HEX);
+    }
+
+    public String generateFirstEntryID(byte[] entryDataContent, Collection<byte[]> externalIdValues) {
+        return generateFirstEntryID(convertToHasContent(entryDataContent), convertToHasValues(externalIdValues));
     }
 
 
@@ -232,6 +240,11 @@ public class Operations {
     public String generateEntryID(String chainIdHex, HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
         return calculateEntryIdBase(chainIdHex, entryData, externalIds).stringHash(Digest.Algorithm.SHA_256, Digest.Encoding.HEX);
     }
+    public String generateEntryID(String chainIdHex, byte[] entryDataContent, Collection<byte[]> externalIdValues) {
+        return generateEntryID(chainIdHex, convertToHasContent(entryDataContent), convertToHasValues(externalIdValues));
+    }
+
+
 
     /**
      * An entryId base is calculated from the chain Id in hex form, the external Ids and the content of the entry!
@@ -339,6 +352,35 @@ public class Operations {
         return new Result<>(resp);
     }
 
+
+    public static <T> HasValue<T> convertToHasValue(T val) {
+        return new HasValue<T>() {
+            @Override
+            public T getValue() {
+                return val;
+            }
+        };
+    }
+
+    public static <T> Collection<HasValue<T>> convertToHasValues(Collection<T> vals) {
+        List<HasValue<T>> result = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(vals)) {
+            for (T val : vals) {
+                result.add(convertToHasValue(val));
+            }
+        }
+        return result;
+
+    }
+
+    public static <T> HasContent<T> convertToHasContent(T content) {
+        return new HasContent<T>() {
+            @Override
+            public T getContent() {
+                return content;
+            }
+        };
+    }
 
     public class Result<T> implements HasValue<T>, HasContent<T> {
         private final T original;
