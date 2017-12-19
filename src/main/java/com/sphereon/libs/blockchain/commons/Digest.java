@@ -103,18 +103,6 @@ public class Digest {
     }
 
 
-    public byte[] getHashInHexFormat(Algorithm algorithm, byte[] input) {
-        byte[] hash = getHash(algorithm, input);
-        return Hex.encodeHexString(hash).getBytes();
-    }
-
-
-    public byte[] getHashInHexFormat(Algorithm algorithm, InputStream inputStream) {
-        byte[] hash = getHash(algorithm, inputStream);
-        return Hex.encodeHexString(hash).getBytes();
-    }
-
-
     public byte[] getHash(Algorithm algorithm, InputStream inputStream) {
         try {
             byte[] buffer = new byte[BUFFER_SIZE_8K];
@@ -127,6 +115,17 @@ public class Digest {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+    }
+
+
+
+    public byte[] getHashAsHex(Algorithm algorithm, byte[] input) {
+        return getHashAsString(algorithm, input, Encoding.HEX).getBytes();
+    }
+
+
+    public byte[] getHashAsHex(Algorithm algorithm, InputStream input) {
+        return getHashAsString(algorithm, input, Encoding.HEX).getBytes();
     }
 
 
@@ -150,6 +149,15 @@ public class Digest {
 
 
     public String getHashAsString(Algorithm algorithm, byte[] input, Encoding encoding) {
+        byte[] hash = getHash(algorithm, input);
+        if (encoding == Encoding.UTF_8) {
+            return new String(hash, Charset.forName("UTF-8"));
+        } else {
+            return Hex.encodeHexString(hash);
+        }
+    }
+
+    public String getHashAsString(Algorithm algorithm, InputStream input, Encoding encoding) {
         byte[] hash = getHash(algorithm, input);
         if (encoding == Encoding.UTF_8) {
             return new String(hash, Charset.forName("UTF-8"));
