@@ -1,26 +1,23 @@
 /*
- *
- * Copyright 2017 Sphereon B.V.
+ * Copyright (c) 2017 Sphereon B.V. <https://sphereon.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- *  limitations under the License.
- *
+ * limitations under the License.
  */
 
 package com.sphereon.libs.blockchain.commons.links;
 
 import com.sphereon.libs.blockchain.commons.RegistrationType;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
+import com.sphereon.libs.blockchain.commons.Utils;
 
 import java.util.*;
 
@@ -74,7 +71,7 @@ public enum Link {
     }
 
     public boolean hasChildren() {
-        return !CollectionUtils.isEmpty(children);
+        return children != null && children.size() > 0;
     }
 
     public Builder newBuilder(RegistrationType type) {
@@ -84,7 +81,7 @@ public enum Link {
 
     private static int countSlashes(String input) {
         int count = 0;
-        if (!StringUtils.isEmpty(input)) {
+        if (Utils.String.isNotEmpty(input)) {
             for (int i = 0; i < input.length(); i++) {
                 if (input.charAt(i) == '/') {
                     count++;
@@ -147,7 +144,7 @@ public enum Link {
 
 
         public Builder add(SortedMap<Link, String> parts) {
-            if (CollectionUtils.isEmpty(parts)) {
+            if (parts == null || parts.size() == 0) {
                 return this;
             }
             for (Map.Entry<Link, String> entry : parts.entrySet()) {
@@ -157,11 +154,11 @@ public enum Link {
         }
 
         public Builder add(Link link, String value) {
-            if (link == EXTERNAL_ID && !StringUtils.isNumeric(value)) {
+            if (link == EXTERNAL_ID && !Utils.String.isNumeric(value)) {
                 throw new RuntimeException("External ID link has to be identified with a zero based number index instead of : " + value);
-            } else if (link == CONTENT && !(StringUtils.isEmpty(value) || "content".equalsIgnoreCase(value))) {
+            } else if (link == CONTENT && !(Utils.String.isEmpty(value) || "content".equalsIgnoreCase(value))) {
                 throw new RuntimeException("Content link has to be identified with a null or empty value instead of : " + value);
-            } else if (StringUtils.isEmpty(value)) {
+            } else if (Utils.String.isEmpty(value)) {
                 throw new RuntimeException("Link " + link + " has to contain a value for builder");
             }
             if (link == CONTENT) {
@@ -195,7 +192,7 @@ public enum Link {
         }
 
         public String buildTargetLink() {
-            if (CollectionUtils.isEmpty(parts)) {
+            if (parts == null || parts.size() == 0) {
                 throw new RuntimeException("Cannot build Target link with no parts");
             }
             Link last = parts.lastKey();
@@ -227,7 +224,7 @@ public enum Link {
     public static class Parser {
         public RegistrationType linkKeyType(String input) {
             String val = linkKeyValue(input);
-            if (StringUtils.isEmpty(val)) {
+            if (Utils.String.isEmpty(val)) {
                 if (isLinkKey(input)) {
                     // Create on the fly
                     return RegistrationType.Impl.of(input);
@@ -241,7 +238,7 @@ public enum Link {
 
         public String linkKeyValueOrInput(String input) {
             String linkKeyValue = linkKeyValue(input);
-            if (StringUtils.isEmpty(linkKeyValue)) {
+            if (Utils.String.isEmpty(linkKeyValue)) {
                 linkKeyValue = input;
             }
             return linkKeyValue;
@@ -255,7 +252,7 @@ public enum Link {
         }
 
         public boolean isLinkKey(String input) {
-            return !StringUtils.isEmpty(input) && input.startsWith(RegistrationType.Defaults.CHAIN_LINK_KEY);
+            return Utils.String.isNotEmpty(input) && input.startsWith(RegistrationType.Defaults.CHAIN_LINK_KEY);
         }
 
         public Link targetLinkType(String input) {
@@ -268,7 +265,7 @@ public enum Link {
 
         public SortedMap<Link, String> targetLinkParts(String input) {
             SortedMap<Link, String> parsed = new TreeMap<>();
-            if (StringUtils.isEmpty(input) || !input.startsWith("/")) {
+            if (Utils.String.isEmpty(input) || !input.startsWith("/")) {
                 parsed.put(NONE, input);
                 return parsed;
             }

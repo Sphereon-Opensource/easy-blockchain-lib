@@ -1,41 +1,33 @@
 /*
- *
- * Copyright 2017 Sphereon B.V.
+ * Copyright (c) 2017 Sphereon B.V. <https://sphereon.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- *  limitations under the License.
- *
+ * limitations under the License.
  */
 
 package com.sphereon.libs.blockchain.commons.links;
 
-import com.google.common.collect.Lists;
 import com.sphereon.libs.blockchain.commons.Digest;
 import com.sphereon.libs.blockchain.commons.Operations;
-import com.sphereon.libs.blockchain.spring.SpringConfiguration;
 import com.sphereon.ms.blockchain.api.model.HasContent;
 import com.sphereon.ms.blockchain.api.model.HasValue;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {SpringConfiguration.class})
 public class TestOperations {
 
     public static final String CHAIN_ID = "502b99271ff6a3f8509ba2764e1e1c1482ad800140c17b25e165837ab5320501";
@@ -47,8 +39,7 @@ public class TestOperations {
     public static final String ENTRY_FIRST_EXTERNAL_ID = "first entry external id";
     public static final String ENTRY_SECOND_EXTERNAL_ID = "second entry external id";
 
-    @Autowired
-    private Operations operations;
+    private Operations operations = Operations.getInstance();
 
     @Test
     public void testChainId() {
@@ -110,7 +101,12 @@ public class TestOperations {
             if (data == null || data.length == 0) {
                 return collect();
             }
-            return Lists.asList(this, data);
+            List<Data> collected = new ArrayList<>();
+            collected.add(this);
+            for (Data datum : data) {
+                collected.add(datum);
+            }
+            return collected;
         }
 
     }

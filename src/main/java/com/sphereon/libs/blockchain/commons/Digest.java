@@ -1,25 +1,20 @@
 /*
- *
- * Copyright 2017 Sphereon B.V.
+ * Copyright (c) 2017 Sphereon B.V. <https://sphereon.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- *  limitations under the License.
- *
+ * limitations under the License.
  */
 
 package com.sphereon.libs.blockchain.commons;
-
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -51,7 +46,7 @@ public class Digest {
 
 
         public static Algorithm from(String value) {
-            if (!StringUtils.isEmpty(value) && value.contains("512")) {
+            if (Utils.String.isNotEmpty(value) && value.contains("512")) {
                 return SHA_512;
             }
             return SHA_256;
@@ -87,7 +82,7 @@ public class Digest {
 
 
     public byte[] getHash(Algorithm algorithm, String input) {
-        if (StringUtils.isEmpty(input)) {
+        if (Utils.String.isEmpty(input)) {
             return new byte[]{};
         }
         return getHash(algorithm, input.getBytes());
@@ -140,7 +135,7 @@ public class Digest {
 
 
     public String getHashAsString(Algorithm algorithm, String input, Encoding encoding) {
-        if (StringUtils.isEmpty(input)) {
+        if (Utils.String.isEmpty(input)) {
             return "";
         }
         return getHashAsString(algorithm, input.getBytes(), encoding);
@@ -153,7 +148,7 @@ public class Digest {
         if (encoding == Encoding.UTF_8) {
             return new String(hash, Charset.forName("UTF-8"));
         } else {
-            return Hex.encodeHexString(hash);
+            return Utils.Hex.encodeAsString(hash);
         }
     }
 
@@ -162,7 +157,7 @@ public class Digest {
         if (encoding == Encoding.UTF_8) {
             return new String(hash, Charset.forName("UTF-8"));
         } else {
-            return Hex.encodeHexString(hash);
+            return Utils.Hex.encodeAsString(hash);
         }
     }
 

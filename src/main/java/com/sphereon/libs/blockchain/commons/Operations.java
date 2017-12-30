@@ -1,32 +1,31 @@
 /*
- *
- * Copyright 2017 Sphereon B.V.
+ * Copyright (c) 2017 Sphereon B.V. <https://sphereon.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- *  limitations under the License.
- *
+ * limitations under the License.
  */
 
 package com.sphereon.libs.blockchain.commons;
 
 import com.sphereon.ms.blockchain.api.model.HasContent;
 import com.sphereon.ms.blockchain.api.model.HasValue;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
 
 import javax.xml.bind.DatatypeConverter;
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -164,7 +163,7 @@ public class Operations {
      */
     public Result<byte[]> calculateChainIdBaseFromBytes(Collection<byte[]> externalIds) {
         byte[] hash = new byte[0];
-        if (!CollectionUtils.isEmpty(externalIds)) {
+        if (!isEmpty(externalIds)) {
             for (byte[] externalId : externalIds) {
                 hash = concat(hash, digest.getSHA256Hash(externalId)).original();
             }
@@ -185,12 +184,16 @@ public class Operations {
      */
     public Result<byte[]> calculateChainIdBase(Collection<? extends HasValue<byte[]>> externalIds) {
         List<byte[]> byteList = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(externalIds)) {
+        if (!isEmpty(externalIds)) {
             for (HasValue<byte[]> externalId : externalIds) {
                 byteList.add(externalId.getValue());
             }
         }
         return calculateChainIdBaseFromBytes(byteList);
+    }
+
+    private static boolean isEmpty(Collection<?> collection) {
+        return collection == null || collection.size() == 0;
     }
 
     /**
@@ -297,7 +300,7 @@ public class Operations {
 
     public Result<byte[]> entryToBytes(String chainIdHex, HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
         byte[] chainID;
-        if (!StringUtils.isEmpty(chainIdHex)) {
+        if (Utils.String.isNotEmpty(chainIdHex)) {
             chainID = fromHex(chainIdHex).original();
         } else {
             chainID = calculateChainIdBase(externalIds).byteHash(Digest.Algorithm.SHA_256);
@@ -364,7 +367,7 @@ public class Operations {
 
     public static <T> Collection<HasValue<T>> convertToHasValues(Collection<T> vals) {
         List<HasValue<T>> result = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(vals)) {
+        if (!isEmpty(vals)) {
             for (T val : vals) {
                 result.add(convertToHasValue(val));
             }
