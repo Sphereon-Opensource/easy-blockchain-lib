@@ -19,21 +19,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>com.sphereon.public</groupId>
         <artifactId>easy-blockchain-lib-parent</artifactId>
         <version>0.1.0-SNAPSHOT</version>
-        <relativePath>easy-blockchain-lib-parent/pom.xml</relativePath>
+        <relativePath>../easy-blockchain-lib-parent/pom.xml</relativePath>
     </parent>
-    <artifactId>easy-blockchain-lib-modules</artifactId>
+    <artifactId>easy-blockchain-lib-main</artifactId>
 
-    <packaging>pom</packaging>
-    <modules>
-        <module>easy-blockchain-lib-parent</module>
-        <module>easy-blockchain-lib-main</module>
-        <module>easy-blockchain-lib-osgi</module>
-        <module>easy-blockchain-lib-spring</module>
-    </modules>
-
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
