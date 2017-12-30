@@ -24,16 +24,22 @@
         <groupId>com.sphereon.public</groupId>
         <artifactId>easy-blockchain-lib-parent</artifactId>
         <version>0.1.0-SNAPSHOT</version>
-        <relativePath>easy-blockchain-lib-parent/pom.xml</relativePath>
+        <relativePath>../easy-blockchain-lib-parent/pom.xml</relativePath>
     </parent>
-    <artifactId>easy-blockchain-lib-modules</artifactId>
+    <artifactId>easy-blockchain-lib-spring</artifactId>
 
-    <packaging>pom</packaging>
-    <modules>
-        <module>easy-blockchain-lib-parent</module>
-        <module>easy-blockchain-lib-main</module>
-        <module>easy-blockchain-lib-osgi</module>
-        <module>easy-blockchain-lib-spring</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>easy-blockchain-lib-main</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
 </project>
