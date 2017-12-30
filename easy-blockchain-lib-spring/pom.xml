@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.sphereon.public</groupId>
         <artifactId>easy-blockchain-lib-parent</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.1.0</version>
         <relativePath>../easy-blockchain-lib-parent/pom.xml</relativePath>
     </parent>
     <artifactId>easy-blockchain-lib-spring</artifactId>
