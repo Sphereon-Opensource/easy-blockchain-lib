@@ -16,8 +16,10 @@
 
 package com.sphereon.libs.blockchain.commons;
 
-import com.sphereon.libs.blochain.api.model.HasContent;
-import com.sphereon.libs.blochain.api.model.HasValue;
+import com.sphereon.libs.blockchain.api.HasContent;
+import com.sphereon.libs.blockchain.api.HasValue;
+import com.sphereon.libs.blockchain.api.model.Chain;
+import com.sphereon.libs.blockchain.api.model.Entry;
 
 import javax.xml.bind.DatatypeConverter;
 import java.lang.reflect.Array;
@@ -39,7 +41,7 @@ public class Operations {
     public static Operations getInstance() {
         /*
         We use double checked locking and a non final instance, since we do not know beforehand whether we operate
-        within a Sring context or not.  We also provide configuration support for the Spring singleton scope
+        within a Spring context or not.  We also provide configuration support for the Spring singleton scope in the Spring module
         */
         if (instance == null) {
             synchronized (Operations.class) {
@@ -176,7 +178,7 @@ public class Operations {
     /**
      * A chain ID base is generated from the external Ids of the chain only using SHA-256 hashing!
      * The content of the first entry is disregarded, since inclusion of the content would lead to the Id of the first entry itself
-     * This is not the chainId! It has to be hashed using SHA-256 using HEX encoding to retrieve the chainId.
+     * The result of this function is not the chainId! It has to be hashed using SHA-256 using HEX encoding to retrieve the chainId.
      * Use generateChainId for ons shot implementation
      *
      * @param externalIds A collection of externalId/Metadata values in byte form
@@ -192,6 +194,33 @@ public class Operations {
         return calculateChainIdBaseFromBytes(byteList);
     }
 
+    /**
+     * @param externalIdValues
+     * @return
+     * @see #calculateChainIdBase(Collection)
+     */
+    public Result<byte[]> calculateChainIdBaseFromValues(Collection<byte[]> externalIdValues) {
+        return calculateChainIdBase(convertToHasValues(externalIdValues));
+    }
+
+    /**
+     * @param firstEntry
+     * @return
+     * @see #calculateChainIdBase(Collection)
+     */
+    public Result<byte[]> calculateChainIdBase(Entry firstEntry) {
+        return calculateChainIdBase(firstEntry.getEntryData().getExternalIds());
+    }
+
+    /**
+     * @param chain
+     * @return
+     * @see #calculateChainIdBase(Collection)
+     */
+    public Result<byte[]> calculateChainIdBase(Chain chain) {
+        return calculateChainIdBase(chain.getFirstEntry());
+    }
+
     private static boolean isEmpty(Collection<?> collection) {
         return collection == null || collection.size() == 0;
     }
@@ -203,13 +232,28 @@ public class Operations {
      *
      * @param externalIds A collection of externalId/Metadata values in byte form
      * @return
+     * @see #calculateChainIdBase(Collection) for the byte calculations
      */
     public String generateChainId(Collection<? extends HasValue<byte[]>> externalIds) {
         return calculateChainIdBase(externalIds).stringHash(Digest.Algorithm.SHA_256, Digest.Encoding.HEX);
     }
 
+    /**
+     * @param externalIdValues
+     * @return
+     * @see #generateChainId(Collection)
+     */
     public String generateChainIdFromValues(Collection<byte[]> externalIdValues) {
         return generateChainId(convertToHasValues(externalIdValues));
+    }
+
+    /**
+     * @param chain
+     * @return
+     * @see #generateChainId(Collection)
+     */
+    public String generateChainId(Chain chain) {
+        return generateChainId(chain.getFirstEntry().getEntryData().getExternalIds());
     }
 
 
@@ -221,12 +265,27 @@ public class Operations {
      * @param externalIds
      * @return
      */
-    public String generateFirstEntryID(HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
+    public String generateFirstEntryId(HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
         return calculateEntryIdBase(null, entryData, externalIds).stringHash(Digest.Algorithm.SHA_256, Digest.Encoding.HEX);
     }
 
-    public String generateFirstEntryID(byte[] entryDataContent, Collection<byte[]> externalIdValues) {
-        return generateFirstEntryID(convertToHasContent(entryDataContent), convertToHasValues(externalIdValues));
+    /**
+     * @param entryDataContent
+     * @param externalIdValues
+     * @return
+     * @see #generateFirstEntryId(HasContent, Collection)
+     */
+    public String generateFirstEntryId(byte[] entryDataContent, Collection<byte[]> externalIdValues) {
+        return generateFirstEntryId(convertToHasContent(entryDataContent), convertToHasValues(externalIdValues));
+    }
+
+    /**
+     * @see #generateFirstEntryId(HasContent, Collection)
+     * @param entry
+     * @return
+     */
+    public String generateFirstEntryId(Entry entry) {
+        return generateFirstEntryId(entry.getEntryData(), entry.getEntryData().getExternalIds());
     }
 
 
@@ -243,10 +302,27 @@ public class Operations {
     public String generateEntryID(String chainIdHex, HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
         return calculateEntryIdBase(chainIdHex, entryData, externalIds).stringHash(Digest.Algorithm.SHA_256, Digest.Encoding.HEX);
     }
+
+    /**
+     * @param chainIdHex
+     * @param entryDataContent
+     * @param externalIdValues
+     * @return
+     * @see #generateEntryID(String, HasContent, Collection)
+     */
     public String generateEntryID(String chainIdHex, byte[] entryDataContent, Collection<byte[]> externalIdValues) {
         return generateEntryID(chainIdHex, convertToHasContent(entryDataContent), convertToHasValues(externalIdValues));
     }
 
+    /**
+     * @param chainIdHex
+     * @param entry
+     * @return
+     * @see #generateEntryID(String, HasContent, Collection)
+     */
+    public String generateEntryID(String chainIdHex, Entry entry) {
+        return generateEntryID(chainIdHex, entry.getEntryData(), entry.getEntryData().getExternalIds());
+    }
 
 
     /**
@@ -293,10 +369,25 @@ public class Operations {
         return concat(digest.getSHA512Hash(entryBytes), entryBytes);
     }
 
+    /**
+     * @param chainIdHex
+     * @param firstEntry
+     * @return
+     * @see #calculateEntryIdBase(String, HasContent, Collection)
+     */
+    public Result<byte[]> calculateEntryIdBase(String chainIdHex, Entry firstEntry) {
+        return calculateEntryIdBase(chainIdHex, firstEntry.getEntryData(), firstEntry.getEntryData().getExternalIds());
+    }
+
 
     public Result<byte[]> entryToBytes(HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
         return entryToBytes(null, entryData, externalIds);
     }
+
+    public Result<byte[]> entryToBytes(String chainIdHex, Entry entry) {
+        return entryToBytes(chainIdHex, entry.getEntryData(), entry.getEntryData().getExternalIds());
+    }
+
 
     public Result<byte[]> entryToBytes(String chainIdHex, HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
         byte[] chainID;

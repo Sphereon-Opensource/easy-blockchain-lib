@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sphereon.libs.blochain.api.model;
+package com.sphereon.libs.blockchain.api;
 
 public interface HasValue<T> {
     T getValue();

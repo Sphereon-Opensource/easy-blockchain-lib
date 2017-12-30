@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Sphereon BV https://sphereon.com
+ * Copyright (c) 2017 Sphereon B.V. <https://sphereon.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
