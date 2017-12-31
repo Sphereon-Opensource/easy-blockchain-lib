@@ -28,7 +28,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Digest {
 
-    public static final int BUFFER_SIZE_8K = 8192;
+    private static final int BUFFER_SIZE_8K = 8192;
 
     private static volatile Digest instance;
 
