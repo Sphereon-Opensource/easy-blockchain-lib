@@ -21,9 +21,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.sphereon.public</groupId>
-        <artifactId>easy-blockchain-lib-parent</artifactId>
-        <version>0.1.0</version>
-        <relativePath>../easy-blockchain-lib-parent/pom.xml</relativePath>
+        <artifactId>easy-blockchain-lib-modules</artifactId>
+        <version>0.1.1</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>easy-blockchain-lib-main</artifactId>
 
@@ -32,6 +32,10 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
         </dependency>
     </dependencies>
 </project>

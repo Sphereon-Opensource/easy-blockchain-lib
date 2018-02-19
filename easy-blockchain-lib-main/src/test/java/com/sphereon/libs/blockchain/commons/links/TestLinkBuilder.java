@@ -43,13 +43,13 @@ public class TestLinkBuilder {
         String externalIdTemplate = externalIdLink.getTemplate();
         Link.Builder builder = externalIdLink
                 .newBuilder(RegistrationType.Defaults.HASH)
-                .context("context")
-                .chainId("chain1")
-                .entryId("entry1").externalId(0);
-        Assert.assertEquals("/context/chains/chain1/entries/entry1/externalids/0", builder.buildTargetLink());
+                .context("context-example")
+                .chainId("chain-example")
+                .entryId("entry-example").externalId(0);
+        Assert.assertEquals("/context-example/chains/chain-example/entries/entry-example/externalids/0", builder.buildTargetLink());
         Assert.assertEquals(4, builder.getParts().size());
         Assert.assertEquals(Link.CONTEXT, builder.getParts().firstKey());
-        Assert.assertEquals("context", builder.getParts().get(Link.CONTEXT));
+        Assert.assertEquals("context-example", builder.getParts().get(Link.CONTEXT));
         Assert.assertEquals(Link.EXTERNAL_ID, builder.getParts().lastKey());
         Assert.assertEquals("0", builder.getParts().get(Link.EXTERNAL_ID));
         Assert.assertEquals("ChainLink:Hash", builder.buildLinkKey());
@@ -57,13 +57,14 @@ public class TestLinkBuilder {
 
     @Test
     public void parseLinks() {
-        final String link = "/context/chains/chain1/entries/entry1/externalids/0";
+        final String link = "/my-context/chains/chain1/entries/entry1/externalids/0";
         Assert.assertEquals(Link.EXTERNAL_ID, Link.parser().targetLinkType(link));
+
         SortedMap<Link, String> parts = Link.parser().targetLinkParts(link);
         Assert.assertEquals(4, parts.size());
 
         Assert.assertEquals(Link.EXTERNAL_ID, parts.lastKey());
-        Assert.assertEquals("context", parts.get(Link.CONTEXT));
+        Assert.assertEquals("my-context", parts.get(Link.CONTEXT));
         Assert.assertEquals("chain1", parts.get(Link.CHAIN_ID));
         Assert.assertEquals("entry1", parts.get(Link.ENTRY_ID));
         Assert.assertEquals("0", parts.get(Link.EXTERNAL_ID));
