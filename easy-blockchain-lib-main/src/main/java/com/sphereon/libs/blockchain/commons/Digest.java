@@ -28,7 +28,13 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Digest {
 
-    public static final int BUFFER_SIZE_8K = 8192;
+    private static final int BUFFER_SIZE_8K = 8192;
+
+    private static volatile Digest instance;
+
+    public enum Encoding {
+        UTF_8, HEX
+    }
 
     public enum Algorithm {
         SHA_256("SHA-256"), SHA_512("SHA-512");
@@ -53,13 +59,6 @@ public class Digest {
         }
     }
 
-    public enum Encoding {
-        UTF_8, HEX;
-    }
-
-
-    private static volatile Digest instance;
-
 
     private Digest() {
     }
@@ -68,7 +67,7 @@ public class Digest {
     public static Digest getInstance() {
         /*
         We use double checked locking and a non final instance, since we do not know beforehand whether we operate
-        within a Sring context or not.  We also provide configuration support for the Spring singleton scope
+        within a Spring context or not.  We also provide configuration support for the Spring singleton scope in the spring module
         */
         if (instance == null) {
             synchronized (Digest.class) {

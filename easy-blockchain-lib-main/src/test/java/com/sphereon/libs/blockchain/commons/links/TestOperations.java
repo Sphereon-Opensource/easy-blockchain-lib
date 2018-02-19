@@ -18,8 +18,8 @@ package com.sphereon.libs.blockchain.commons.links;
 
 import com.sphereon.libs.blockchain.commons.Digest;
 import com.sphereon.libs.blockchain.commons.Operations;
-import com.sphereon.libs.blochain.api.model.HasContent;
-import com.sphereon.libs.blochain.api.model.HasValue;
+import com.sphereon.libs.blockchain.api.HasContent;
+import com.sphereon.libs.blockchain.api.HasValue;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -46,7 +46,7 @@ public class TestOperations {
         Collection<Data> externalIds = new Data(CHAIN_FIRST_EXTERNAL_ID).collect(CHAIN_SECOND_EXTERNAL_ID);
         Assert.assertEquals(CHAIN_ID, operations.calculateChainIdBase(externalIds).stringHash(Digest.Algorithm.SHA_256, Digest.Encoding.HEX));
         Assert.assertEquals(CHAIN_ID, operations.generateChainId(externalIds));
-        Assert.assertEquals("322b18e1f267202565bf0d1ee03865f076fd22357ff6dc46c7a6dfef454f3871", operations.generateFirstEntryID(null, externalIds));
+        Assert.assertEquals("322b18e1f267202565bf0d1ee03865f076fd22357ff6dc46c7a6dfef454f3871", operations.generateFirstEntryId(null, externalIds));
     }
 
     @Test
