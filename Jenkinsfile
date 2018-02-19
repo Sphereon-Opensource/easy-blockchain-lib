@@ -1,20 +1,12 @@
-node {
+#!/usr/bin/groovy
+@Library('pipeline-library@master')
 
-    // Checkout code from repository
+def utils = new io.fabric8.Utils()
+
+mavenNode {
     stage('Checkout source') {
-        checkout scm
+        checkout(scm).each { k,v -> env.setProperty(k, v) }
     }
 
-    stage('Build easy-blockchain-lib') {
-		withMaven(
-				// Maven installation declared in the Jenkins "Global Tool Configuration"
-				maven: 'M3')
-			{
-
-            // Run the maven build (works on both linux and windows)
-			sh "mvn clean install"
-
-		}
-		// withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe reports and FindBugs reports
-	}
+    buildLibrary{}
 }
