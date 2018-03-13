@@ -60,6 +60,13 @@ public interface RegistrationType {
         RegistrationType CASE_ID = Impl.of("CaseId").setLabel("Case Id");
         RegistrationType DOCUMENT_ID = Impl.of("DocumentId").setLabel("Document Id");
         RegistrationType GENERAL = Impl.of("General");
+
+        RegistrationType X509_THUMBPRINT = Impl.of("X509Thumbprint").setLabel("X.509 Thumbprint");
+        RegistrationType X509_PUBLIC_KEY = Impl.of("X509PublicKey").setLabel("X.509 Public key");
+        RegistrationType X509_DISTINGUISHED_NAME = Impl.of("X509DN").setLabel("X.509 DN");
+        RegistrationType CRYPTO_KEYS_KEY_ID = Impl.of("CryptoKeysKeyId").setLabel("Crypto Keys KeyId");
+        RegistrationType CRYPTO_KEYS_LIST = Impl.of("CryptoKeysList").setLabel("Crypto Keys List");
+
         String CHAIN_LINK_KEY = "ChainLink" + ":";
 
     }
