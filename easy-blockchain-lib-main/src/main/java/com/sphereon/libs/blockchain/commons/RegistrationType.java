@@ -67,6 +67,9 @@ public interface RegistrationType {
         RegistrationType CRYPTO_KEYS_KEY_ID = Impl.of("CryptoKeysKeyId").setLabel("Crypto Keys KeyId");
         RegistrationType CRYPTO_KEYS_LIST = Impl.of("CryptoKeysList").setLabel("Crypto Keys List");
 
+        RegistrationType ACTION = Impl.of("Action").setLabel("Action");
+        RegistrationType SIGNATURE = Impl.of("Signature");
+
         String CHAIN_LINK_KEY = "ChainLink" + ":";
 
     }
