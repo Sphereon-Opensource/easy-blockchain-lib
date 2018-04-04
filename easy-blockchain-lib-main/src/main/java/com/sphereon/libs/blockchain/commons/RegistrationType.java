@@ -46,13 +46,6 @@ public interface RegistrationType {
     boolean isChainLink(String key);
 
     interface Defaults {
-        RegistrationType X509_THUMBPRINT = Impl.of("X509Thumbprint").setLabel("X.509 Thumbprint");
-        RegistrationType X509_PUBLIC_KEY = Impl.of("X509PublicKey").setLabel("X.509 Public key");
-        RegistrationType X509_DISTINGUISHED_NAME = Impl.of("X509DN").setLabel("X.509 DN");
-        RegistrationType CRYPTO_KEYS_KEY_ID = Impl.of("CryptoKeysKeyId").setLabel("Crypto Keys KeyId");
-        RegistrationType CRYPTO_KEYS_LIST = Impl.of("CryptoKeysList").setLabel("Crypto Keys List");
-
-
         RegistrationType CHAIN_TYPE = Impl.of("ChainType").setLabel("Chain type");
         RegistrationType CHAIN_LINK = Impl.of("ChainLink").setLabel("Chain link");
         RegistrationType HASH = Impl.of("Hash").setLabel("File/content hash");
