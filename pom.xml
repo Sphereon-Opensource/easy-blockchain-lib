@@ -68,18 +68,36 @@
             <organizationUrl>https://sphereon.com</organizationUrl>
         </developer>
     </developers>
+	
+	<repositories>
+		<repository>
+			<id>dev.azure.com-mseng-zcalvinmaven</id>
+			<url>https://pkgs.dev.azure.com/mseng/_packaging/zCalvinMaven2/maven/v1</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
     <distributionManagement>
         <snapshotRepository>
-            <id>sphereon-opensource-snapshots</id>
+            <id>dev-azure-com-sphereonbv-mavenartifacts</id>
             <name>Sphereon Public Snapshots</name>
-            <url>http://nexus.qa.sphereon.com/repository/sphereon-opensource-snapshots/</url>
+            <url>https://pkgs.dev.azure.com/sphereonbv/_packaging/MavenArtifacts/maven/v1/</url>
         </snapshotRepository>
         <repository>
-            <id>sphereon-opensource-releases</id>
-            <name>Sphereon Public Releases</name>
-            <url>http://nexus.qa.sphereon.com/repository/sphereon-opensource-releases/</url>
-        </repository>
+            <id>dev-azure-com-sphereonbv-mavenartifacts</id>
+			<url>https://pkgs.dev.azure.com/sphereonbv/_packaging/MavenArtifacts/maven/v1</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
     </distributionManagement>
 
 
