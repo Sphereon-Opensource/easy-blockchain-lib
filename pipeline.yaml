@@ -1,0 +1,8 @@
+steps:
+- task: Maven@1
+  displayName: 'Maven pom.xml'
+  inputs:
+    goals: deploy
+    options: '--settings $(settings_xml.secureFilePath)'
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    mavenAuthenticateFeed: false
