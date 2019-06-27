@@ -7,7 +7,7 @@ phases:
   build:
     commands:
        - echo "${CODEBUILD_WEBHOOK_HEAD_REF}"
-       - aws s3 cp s3://nexuscredentials-cm/maven/settings.xml .
+       - aws s3 cp s3://nexuscredentials-cms/maven/settings.xml .
        - |
          if [ "${CODEBUILD_WEBHOOK_HEAD_REF}" = "refs/heads/develop" -o "${CODEBUILD_WEBHOOK_HEAD_REF}" = "refs/heads/master" ]; then
              mvn clean install deploy -s settings.xml
