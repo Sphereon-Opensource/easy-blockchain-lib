@@ -40,7 +40,7 @@ Of course we also provide releases in our maven repository
     <dependency>
         <groupId>com.sphereon.public</groupId>
         <artifactId>easy-blockchain-lib-main</artifactId> <!-- Use easy-blockchain-lib-osgi for OSGI bundle  -->
-        <version>0.1.0</version>
+        <version>0.1.3</version>
     </dependency>
 ```
 
