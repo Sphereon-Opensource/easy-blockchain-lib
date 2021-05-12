@@ -1,12 +1,11 @@
 <h1 align="center">
   <br>
-  <a href="https://www.sphereon.com"><img src="https://sphereon.com/wp-content/uploads/2016/11/sphereon-logo.png" alt="Sphereon" width="200"></a>
-  <br>
-  Easy Blockchain Helper Library
+  <a href="https://www.sphereon.com"><img src="https://sphereon.com/content/themes/sphereon/assets/img/logo.svg" alt="Sphereon" width="400"></a>
+  <br> Java implementation easy blockchain API
+  <br> with useful functions for the  
+  <br> Easy Blockchain API
   <br>
 </h1>
-
-<h4 align="center">A Java implementation with useful functions for the easy blockchain API</h4>
 
 You can use this Java library to perform common functions for the [Easy Blockchain API](https://docs.sphereon.com/api/easy-blockchain/0.10/html)
 
@@ -34,7 +33,7 @@ Of course we also provide releases in our maven repository
         <repository>
             <id>sphereon-public</id>
             <name>Sphereon Public</name>
-            <url>http://nexus.qa.sphereon.com/repository/sphereon-public/</url>
+            <url>https://nexus.qa.sphereon.com/repository/sphereon-public/</url>
          </repository>
     </repositories>
 ...
