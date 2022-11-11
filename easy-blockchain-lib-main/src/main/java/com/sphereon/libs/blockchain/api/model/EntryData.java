@@ -49,13 +49,16 @@ public class EntryData implements HasContent<byte[]> {
         this.externalIds = externalIds;
     }
 
+
     public List<ExternalId> getExternalIds() {
         return externalIds;
     }
 
+
     public byte[] getContent() {
         return content;
     }
+
 
     public void setContent(byte[] content) {
         this.content = content;
@@ -70,17 +73,24 @@ public class EntryData implements HasContent<byte[]> {
                 '}';
     }
 
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof EntryData)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof EntryData)) {
+            return false;
+        }
 
         EntryData entryData = (EntryData) o;
 
-        if (getExternalIds() != null ? !getExternalIds().equals(entryData.getExternalIds()) : entryData.getExternalIds() != null)
+        if (getExternalIds() != null ? !getExternalIds().equals(entryData.getExternalIds()) : entryData.getExternalIds() != null) {
             return false;
+        }
         return Arrays.equals(getContent(), entryData.getContent());
     }
+
 
     @Override
     public int hashCode() {

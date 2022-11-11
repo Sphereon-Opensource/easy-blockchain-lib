@@ -37,6 +37,7 @@ public class TestLinkBuilder {
         Assert.assertEquals("ChainLink", builder.buildLinkKey());
     }
 
+
     @Test
     public void buildExternalIdLink() {
         Link externalIdLink = Link.EXTERNAL_ID;
@@ -54,6 +55,7 @@ public class TestLinkBuilder {
         Assert.assertEquals("0", builder.getParts().get(Link.EXTERNAL_ID));
         Assert.assertEquals("ChainLink:Hash", builder.buildLinkKey());
     }
+
 
     @Test
     public void parseLinks() {
@@ -87,8 +89,6 @@ public class TestLinkBuilder {
         Assert.assertEquals("Test", Link.parser().linkKeyValue(RegistrationType.Defaults.CHAIN_LINK_KEY + "Test"));
         Assert.assertNull(Link.parser().linkKeyValue("Test"));
         Assert.assertEquals("Test", Link.parser().linkKeyValueOrInput("Test"));
-
-
 
 
     }

@@ -46,18 +46,22 @@ public interface Subsystem {
         private List<RegistrationType> registrationTypes = new ArrayList<>();
         private RegistrationType[] defaults = new RegistrationType[]{};
 
+
         public static Impl of(String name) {
             return new Impl(name);
         }
+
 
         protected Impl(String name) {
             this.name = name;
         }
 
+
         @Override
         public String getName() {
             return name;
         }
+
 
         @Override
         public Impl registerDefaultRegistrations() {
@@ -66,6 +70,7 @@ public interface Subsystem {
             }
             return this;
         }
+
 
         public Impl register(RegistrationType registrationType) {
             RegistrationTypeRegistry.getInstance().add(registrationType, this);
@@ -76,35 +81,45 @@ public interface Subsystem {
             return this;
         }
 
+
         public Impl defaults(RegistrationType... defaults) {
             this.defaults = defaults;
             return this;
         }
+
 
         @Override
         public List<RegistrationType> getRegisteredEntryTypes() {
             return registrationTypes;
         }
 
+
         @Override
         public boolean isRegistered(RegistrationType registrationType) {
             return getRegisteredEntryTypes().contains(registrationType);
         }
+
 
         @Override
         public boolean isRegistered() {
             return !getRegisteredEntryTypes().isEmpty();
         }
 
+
         @Override
         public boolean equals(Object o) {
-            if (this == o) { return true; }
-            if (!(o instanceof Impl)) { return false; }
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof Impl)) {
+                return false;
+            }
 
             Impl subsystem = (Impl) o;
 
             return getName() != null ? getName().equals(subsystem.getName()) : subsystem.getName() == null;
         }
+
 
         @Override
         public int hashCode() {

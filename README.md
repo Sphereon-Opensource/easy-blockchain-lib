@@ -8,16 +8,21 @@
 
 <h4 align="center">A Java implementation with useful functions for the easy blockchain API</h4>
 
-You can use this Java library to perform common functions for the [Easy Blockchain API](https://docs.sphereon.com/api/easy-blockchain/0.10/html)
+You can use this Java library to perform common functions for
+the [Easy Blockchain API](https://docs.sphereon.com/api/easy-blockchain/0.10/html)
 
 ## Key Features
-* Determine Chain and Entry IDs before anchoring in the blockchain, see: [id calculation documentation](https://docs.sphereon.com/api/easy-blockchain/0.10/html#_id_calculation)
+
+* Determine Chain and Entry IDs before anchoring in the blockchain,
+  see: [id calculation documentation](https://docs.sphereon.com/api/easy-blockchain/0.10/html#_id_calculation)
 * Create hashes of content
-* Create chain links to other chains, entries or contexts at any level, see: [chainlink documentation](https://docs.sphereon.com/api/easy-blockchain/0.10/html#_chain_links)
+* Create chain links to other chains, entries or contexts at any level,
+  see: [chainlink documentation](https://docs.sphereon.com/api/easy-blockchain/0.10/html#_chain_links)
 
 ## How To Use
-To clone and use this library application, you'll need [Git](https://git-scm.com), [Maven](https://maven.apache.org/) and your favorite Java IDE.
-Of course we also provide releases in our maven repository 
+
+To clone and use this library application, you'll need [Git](https://git-scm.com), [Maven](https://maven.apache.org/) and your favorite Java
+IDE. Of course we also provide releases in our maven repository
 
 ```bash
 # Clone this repository
@@ -45,8 +50,8 @@ Of course we also provide releases in our maven repository
     </dependency>
 ```
 
-
 #### License
+
 [Apache2](https://www.apache.org/licenses/LICENSE-2.0)
 
 ---

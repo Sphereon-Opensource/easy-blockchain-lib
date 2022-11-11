@@ -16,10 +16,10 @@
 
 package com.sphereon.libs.blockchain.commons.links;
 
-import com.sphereon.libs.blockchain.commons.Digest;
-import com.sphereon.libs.blockchain.commons.Operations;
 import com.sphereon.libs.blockchain.api.HasContent;
 import com.sphereon.libs.blockchain.api.HasValue;
+import com.sphereon.libs.blockchain.commons.Digest;
+import com.sphereon.libs.blockchain.commons.Operations;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,6 +41,7 @@ public class TestOperations {
 
     private Operations operations = Operations.getInstance();
 
+
     @Test
     public void testChainId() {
         Collection<Data> externalIds = new Data(CHAIN_FIRST_EXTERNAL_ID).collect(CHAIN_SECOND_EXTERNAL_ID);
@@ -48,6 +49,7 @@ public class TestOperations {
         Assert.assertEquals(CHAIN_ID, operations.generateChainId(externalIds));
         Assert.assertEquals("322b18e1f267202565bf0d1ee03865f076fd22357ff6dc46c7a6dfef454f3871", operations.generateFirstEntryId(null, externalIds));
     }
+
 
     @Test
     public void testEntryId() {
@@ -62,27 +64,33 @@ public class TestOperations {
 
         private byte[] data;
 
+
         public Data(String data) {
             this.data = data == null ? new byte[]{} : data.getBytes();
         }
 
+
         public Data(byte[] data) {
             this.data = data;
         }
+
 
         @Override
         public byte[] getContent() {
             return data;
         }
 
+
         @Override
         public byte[] getValue() {
             return data;
         }
 
+
         public Collection<Data> collect() {
             return Collections.singletonList(this);
         }
+
 
         public Collection<Data> collect(String... data) {
             if (data == null || data.length == 0) {
@@ -96,6 +104,7 @@ public class TestOperations {
             }
             return collect(converted);
         }
+
 
         public Collection<Data> collect(Data... data) {
             if (data == null || data.length == 0) {

@@ -36,14 +36,17 @@ public class ExternalId implements HasValue<byte[]> {
     @ApiModelProperty(value = "Metadata value", notes = "You can store any byte value in this field. The value you supply is included during both Chain Id and Entry Id calculation")
     private byte[] value;
 
+
     public byte[] getValue() {
         return value;
     }
+
 
     public ExternalId setValue(byte[] value) {
         this.value = value;
         return this;
     }
+
 
     @Override
     public String toString() {
@@ -52,15 +55,21 @@ public class ExternalId implements HasValue<byte[]> {
                 '}';
     }
 
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ExternalId)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ExternalId)) {
+            return false;
+        }
 
         ExternalId that = (ExternalId) o;
 
         return Arrays.equals(getValue(), that.getValue());
     }
+
 
     @Override
     public int hashCode() {

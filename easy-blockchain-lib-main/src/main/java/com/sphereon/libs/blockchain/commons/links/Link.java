@@ -35,13 +35,18 @@ public enum Link {
 
     private String template;
 
-    Link(BlockhainType type, String template) {
+
+    Link(BlockhainType type,
+         String template) {
         this.type = type;
         this.template = template;
         this.parent = null;
     }
 
-    Link(BlockhainType type, String template, Link parent) {
+
+    Link(BlockhainType type,
+         String template,
+         Link parent) {
         this.type = type;
         this.template = template;
         this.parent = parent;
@@ -50,29 +55,36 @@ public enum Link {
         }
     }
 
+
     protected String getTemplate() {
         return template;
     }
+
 
     public BlockhainType getType() {
         return type;
     }
 
+
     public Link getParent() {
         return parent;
     }
+
 
     public boolean hasParent() {
         return getParent() != null;
     }
 
+
     public List<Link> getChildren() {
         return Collections.unmodifiableList(children);
     }
 
+
     public boolean hasChildren() {
         return children != null && children.size() > 0;
     }
+
 
     public Builder newBuilder(RegistrationType type) {
         return new Builder(this, type);
@@ -91,6 +103,7 @@ public enum Link {
         return count;
     }
 
+
     public static Parser parser() {
         return new Parser();
     }
@@ -101,41 +114,50 @@ public enum Link {
         private final RegistrationType type;
         private final Link link;
 
-        private Builder(Link link, RegistrationType type) {
+
+        private Builder(Link link,
+                        RegistrationType type) {
             reset();
             this.link = link;
             this.type = type;
         }
+
 
         public Builder reset() {
             this.parts = new TreeMap<>();
             return this;
         }
 
+
         public Builder none(String value) {
             add(NONE, value);
             return this;
         }
+
 
         public Builder context(String value) {
             add(CONTEXT, value);
             return this;
         }
 
+
         public Builder chainId(String value) {
             add(CHAIN_ID, value);
             return this;
         }
+
 
         public Builder entryId(String value) {
             add(ENTRY_ID, value);
             return this;
         }
 
+
         public Builder externalId(int index) {
             add(EXTERNAL_ID, "" + index);
             return this;
         }
+
 
         public Builder content() {
             add(CONTENT, "content");
@@ -153,7 +175,9 @@ public enum Link {
             return this;
         }
 
-        public Builder add(Link link, String value) {
+
+        public Builder add(Link link,
+                           String value) {
             if (link == EXTERNAL_ID && !Utils.String.isNumeric(value)) {
                 throw new RuntimeException("External ID link has to be identified with a zero based number index instead of : " + value);
             } else if (link == CONTENT && !(Utils.String.isEmpty(value) || "content".equalsIgnoreCase(value))) {
@@ -168,9 +192,11 @@ public enum Link {
             return this;
         }
 
+
         public RegistrationType getType() {
             return type;
         }
+
 
         public String getLinkTypeName() {
             if (getType() == null) {
@@ -178,6 +204,7 @@ public enum Link {
             }
             return getType().getName();
         }
+
 
         public String buildLinkKey() {
             if (getType() != null && !RegistrationType.Defaults.CHAIN_LINK.equals(getType())) {
@@ -187,9 +214,11 @@ public enum Link {
             }
         }
 
+
         public byte[] buildLinkKeyasBytes() {
             return buildLinkKey().getBytes();
         }
+
 
         public String buildTargetLink() {
             if (parts == null || parts.size() == 0) {
@@ -209,9 +238,11 @@ public enum Link {
             return String.format(last.template, values);
         }
 
+
         public byte[] buildTargetLinkasBytes() {
             return buildTargetLink().getBytes();
         }
+
 
         public SortedMap<Link, String> getParts() {
             return new TreeMap<>(parts);
@@ -236,6 +267,7 @@ public enum Link {
             return registrations.size() == 0 ? null : (RegistrationType) registrations.toArray()[registrations.size()];
         }
 
+
         public String linkKeyValueOrInput(String input) {
             String linkKeyValue = linkKeyValue(input);
             if (Utils.String.isEmpty(linkKeyValue)) {
@@ -244,6 +276,7 @@ public enum Link {
             return linkKeyValue;
         }
 
+
         public String linkKeyValue(String input) {
             if (!isLinkKey(input)) {
                 return null;
@@ -251,17 +284,22 @@ public enum Link {
             return RegistrationType.Impl.stripChainLinkKey(input);
         }
 
+
         public boolean isLinkKey(String input) {
             return Utils.String.isNotEmpty(input) && input.startsWith(RegistrationType.Defaults.CHAIN_LINK_KEY);
         }
+
 
         public Link targetLinkType(String input) {
             return targetLinkParts(input).lastKey();
         }
 
-        public String targetLinkPart(String input, Link link) {
+
+        public String targetLinkPart(String input,
+                                     Link link) {
             return targetLinkParts(input).get(link);
         }
+
 
         public SortedMap<Link, String> targetLinkParts(String input) {
             SortedMap<Link, String> parsed = new TreeMap<>();

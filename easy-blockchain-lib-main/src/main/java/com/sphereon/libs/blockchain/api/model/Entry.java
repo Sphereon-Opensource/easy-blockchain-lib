@@ -40,6 +40,7 @@ public class Entry {
         return entryData;
     }
 
+
     public void setEntryData(EntryData entryData) {
         this.entryData = entryData;
     }
@@ -55,13 +56,18 @@ public class Entry {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Entry)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Entry)) {
+            return false;
+        }
 
         Entry entry = (Entry) o;
 
         return getEntryData() != null ? getEntryData().equals(entry.getEntryData()) : entry.getEntryData() == null;
     }
+
 
     @Override
     public int hashCode() {

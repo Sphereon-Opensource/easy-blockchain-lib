@@ -79,42 +79,51 @@ public interface RegistrationType {
         private String label;
         private List<Subsystem> subsystems = new ArrayList<>();
 
+
         public static RegistrationType of(String name) {
             return new Impl(stripChainLinkKey(name));
         }
+
 
         public static RegistrationType of(byte[] name) {
             return of(new String(name));
         }
 
+
         protected Impl(String name) {
             this.name = name;
         }
+
 
         @Override
         public String getName() {
             return name;
         }
 
+
         @Override
         public byte[] getNameInBytes() {
             return getName() == null ? null : getName().getBytes();
         }
+
 
         @Override
         public boolean isRegistered() {
             return RegistrationTypeRegistry.getInstance().get(getName()) != null;
         }
 
+
         @Override
         public boolean isRegistered(Subsystem subsystem) {
             return isRegistered() && (subsystem == null || subsystems.contains(subsystem));
         }
 
+
         @Override
         public List<Subsystem> getSubsystems() {
             return Collections.unmodifiableList(subsystems);
         }
+
 
         @Override
         public RegistrationType register(Subsystem subsystem) {
@@ -124,19 +133,23 @@ public interface RegistrationType {
             return this;
         }
 
+
         public static String stripChainLinkKey(String input) {
             return Utils.String.isEmpty(input) ? input : input.replaceFirst(RegistrationType.Defaults.CHAIN_LINK_KEY, "");
         }
+
 
         @Override
         public String createChainLinkKey() {
             return Link.NONE.newBuilder(this).buildLinkKey();
         }
 
+
         @Override
         public boolean isChainLink(String key) {
             return from(key).contains(Defaults.CHAIN_LINK) && from(key).contains(this);
         }
+
 
         public static Set<RegistrationType> from(String input) {
             Set<RegistrationType> result = new HashSet<>();
@@ -166,6 +179,7 @@ public interface RegistrationType {
             return getLabel();
         }*/
 
+
         public String getLabel() {
             if (label == null) {
                 return getName();
@@ -173,21 +187,30 @@ public interface RegistrationType {
             return label;
         }
 
+
         public Impl setLabel(String label) {
             this.label = label;
             return this;
         }
 
+
         @Override
         public boolean equals(Object o) {
-            if (this == o) { return true; }
-            if (!(o instanceof Impl)) { return false; }
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof Impl)) {
+                return false;
+            }
 
             Impl that = (Impl) o;
 
-            if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) { return false; }
+            if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
+                return false;
+            }
             return getLabel() != null ? getLabel().equals(that.getLabel()) : that.getLabel() == null;
         }
+
 
         @Override
         public int hashCode() {

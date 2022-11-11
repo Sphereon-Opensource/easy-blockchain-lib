@@ -28,7 +28,7 @@
     <artifactId>easy-blockchain-lib-osgi</artifactId>
     <packaging>bundle</packaging>
 
-    
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

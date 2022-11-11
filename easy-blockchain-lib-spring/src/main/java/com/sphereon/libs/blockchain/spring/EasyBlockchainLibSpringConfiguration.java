@@ -30,10 +30,12 @@ public class EasyBlockchainLibSpringConfiguration {
         return Operations.getInstance();
     }
 
+
     @Bean
     public Digest digest() {
         return Digest.getInstance();
     }
+
 
     @Bean
     public RegistrationTypeRegistry registrationTypeRegistry() {

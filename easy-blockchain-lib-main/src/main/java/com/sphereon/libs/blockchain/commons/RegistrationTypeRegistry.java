@@ -24,7 +24,9 @@ import java.util.*;
 public class RegistrationTypeRegistry {
     private Map<String, RegistrationType> registrationTypes = new HashMap<>();
 
-    public RegistrationTypeRegistry add(RegistrationType registrationType, Subsystem subsystem) {
+
+    public RegistrationTypeRegistry add(RegistrationType registrationType,
+                                        Subsystem subsystem) {
         if (!registrationTypes.keySet().contains(registrationType.getName())) {
             registrationTypes.put(registrationType.getName(), registrationType);
         }
@@ -32,9 +34,12 @@ public class RegistrationTypeRegistry {
         return this;
     }
 
-    public boolean contains(RegistrationType registrationType, Subsystem subsystem) {
+
+    public boolean contains(RegistrationType registrationType,
+                            Subsystem subsystem) {
         return registrationTypes.keySet().contains(registrationType.getName()) && registrationTypes.get(registrationType.getName()).isRegistered(subsystem);
     }
+
 
     public RegistrationType get(String name) {
         if (Utils.String.isEmpty(name)) {
@@ -53,9 +58,11 @@ public class RegistrationTypeRegistry {
         return registrationType;
     }
 
+
     public Collection<RegistrationType> getAll() {
         return registrationTypes.values();
     }
+
 
     public Collection<RegistrationType> getAll(Subsystem subsystem) {
         List<RegistrationType> bySubsytem = new ArrayList<>();
@@ -67,10 +74,12 @@ public class RegistrationTypeRegistry {
         return bySubsytem;
     }
 
+
     public RegistrationTypeRegistry initSubsystem(Subsystem subSystem) {
         subSystem.registerDefaultRegistrations();
         return this;
     }
+
 
     public RegistrationTypeRegistry initDefaultSubsystems() {
         initSubsystem(Subsystem.Default.ALFRESCO);
@@ -83,8 +92,10 @@ public class RegistrationTypeRegistry {
 
     private static volatile RegistrationTypeRegistry instance;
 
+
     private RegistrationTypeRegistry() {
     }
+
 
     public static RegistrationTypeRegistry getInstance() {
         /*

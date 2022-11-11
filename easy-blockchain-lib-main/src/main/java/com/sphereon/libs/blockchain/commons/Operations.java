@@ -38,6 +38,7 @@ public class Operations {
     private static volatile Operations instance;
     private static Digest digest = Digest.getInstance();
 
+
     public static Operations getInstance() {
         /*
         We use double checked locking and a non final instance, since we do not know beforehand whether we operate
@@ -53,13 +54,18 @@ public class Operations {
         return instance;
     }
 
-    public Result<byte[]> concat(Result<byte[]> first, Result<byte[]> append) {
+
+    public Result<byte[]> concat(Result<byte[]> first,
+                                 Result<byte[]> append) {
         return concat(first.original(), append.original());
     }
 
-    public Result<byte[]> concat(Result<byte[]> first, byte[] append) {
+
+    public Result<byte[]> concat(Result<byte[]> first,
+                                 byte[] append) {
         return concat(first.original(), append);
     }
+
 
     /**
      * Convatenate two byte arrays
@@ -68,7 +74,8 @@ public class Operations {
      * @param append
      * @return
      */
-    public Result<byte[]> concat(byte[] first, byte[] append) {
+    public Result<byte[]> concat(byte[] first,
+                                 byte[] append) {
         byte[] result = Arrays.copyOf(first, first.length + append.length);
         System.arraycopy(append, 0, result, first.length, append.length);
         return new Result<>(result);
@@ -82,15 +89,19 @@ public class Operations {
      * @param append
      * @return
      */
-    public Result<byte[]> concat(byte[] first, byte append) {
+    public Result<byte[]> concat(byte[] first,
+                                 byte append) {
         byte[] result = Arrays.copyOf(first, first.length + 1);
         Array.setByte(result, first.length, append);
         return new Result<>(result);
     }
 
-    public Result<byte[]> concat(byte[] first, String append) {
+
+    public Result<byte[]> concat(byte[] first,
+                                 String append) {
         return concat(first, append.getBytes());
     }
+
 
     /**
      * Convert a string to hex string
@@ -103,6 +114,7 @@ public class Operations {
         return new Result<>(string);
     }
 
+
     /**
      * Convert a hex string to a byte array
      *
@@ -112,6 +124,7 @@ public class Operations {
     public Result<byte[]> fromHex(String hex) {
         return new Result(DatatypeConverter.parseHexBinary(hex));
     }
+
 
     /**
      * Convert a byte array to hex
@@ -139,6 +152,7 @@ public class Operations {
         return toByteArray(value.shortValue());
     }
 
+
     /**
      * Convert a short value to byte array
      *
@@ -153,6 +167,7 @@ public class Operations {
         buffer.putShort(value);
         return new Result<>(buffer.array());
     }
+
 
     /**
      * A chain ID base is generated from the external Ids of the chain only using SHA-256 hashing!
@@ -194,6 +209,7 @@ public class Operations {
         return calculateChainIdBaseFromBytes(byteList);
     }
 
+
     /**
      * @param externalIdValues
      * @return
@@ -202,6 +218,7 @@ public class Operations {
     public Result<byte[]> calculateChainIdBaseFromValues(Collection<byte[]> externalIdValues) {
         return calculateChainIdBase(convertToHasValues(externalIdValues));
     }
+
 
     /**
      * @param firstEntry
@@ -212,6 +229,7 @@ public class Operations {
         return calculateChainIdBase(firstEntry.getEntryData().getExternalIds());
     }
 
+
     /**
      * @param chain
      * @return
@@ -221,9 +239,11 @@ public class Operations {
         return calculateChainIdBase(chain.getFirstEntry());
     }
 
+
     private static boolean isEmpty(Collection<?> collection) {
         return collection == null || collection.size() == 0;
     }
+
 
     /**
      * A chain ID is generated from the external Ids of the chain only using SHA-256 hashing!
@@ -238,6 +258,7 @@ public class Operations {
         return calculateChainIdBase(externalIds).stringHash(Digest.Algorithm.SHA_256, Digest.Encoding.HEX);
     }
 
+
     /**
      * @param externalIdValues
      * @return
@@ -246,6 +267,7 @@ public class Operations {
     public String generateChainIdFromValues(Collection<byte[]> externalIdValues) {
         return generateChainId(convertToHasValues(externalIdValues));
     }
+
 
     /**
      * @param chain
@@ -265,9 +287,11 @@ public class Operations {
      * @param externalIds
      * @return
      */
-    public String generateFirstEntryId(HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
+    public String generateFirstEntryId(HasContent<byte[]> entryData,
+                                       Collection<? extends HasValue<byte[]>> externalIds) {
         return calculateEntryIdBase(null, entryData, externalIds).stringHash(Digest.Algorithm.SHA_256, Digest.Encoding.HEX);
     }
+
 
     /**
      * @param entryDataContent
@@ -275,14 +299,16 @@ public class Operations {
      * @return
      * @see #generateFirstEntryId(HasContent, Collection)
      */
-    public String generateFirstEntryId(byte[] entryDataContent, Collection<byte[]> externalIdValues) {
+    public String generateFirstEntryId(byte[] entryDataContent,
+                                       Collection<byte[]> externalIdValues) {
         return generateFirstEntryId(convertToHasContent(entryDataContent), convertToHasValues(externalIdValues));
     }
 
+
     /**
-     * @see #generateFirstEntryId(HasContent, Collection)
      * @param entry
      * @return
+     * @see #generateFirstEntryId(HasContent, Collection)
      */
     public String generateFirstEntryId(Entry entry) {
         return generateFirstEntryId(entry.getEntryData(), entry.getEntryData().getExternalIds());
@@ -299,9 +325,12 @@ public class Operations {
      * @param externalIds
      * @return
      */
-    public String generateEntryID(String chainIdHex, HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
+    public String generateEntryID(String chainIdHex,
+                                  HasContent<byte[]> entryData,
+                                  Collection<? extends HasValue<byte[]>> externalIds) {
         return calculateEntryIdBase(chainIdHex, entryData, externalIds).stringHash(Digest.Algorithm.SHA_256, Digest.Encoding.HEX);
     }
+
 
     /**
      * @param chainIdHex
@@ -310,9 +339,12 @@ public class Operations {
      * @return
      * @see #generateEntryID(String, HasContent, Collection)
      */
-    public String generateEntryID(String chainIdHex, byte[] entryDataContent, Collection<byte[]> externalIdValues) {
+    public String generateEntryID(String chainIdHex,
+                                  byte[] entryDataContent,
+                                  Collection<byte[]> externalIdValues) {
         return generateEntryID(chainIdHex, convertToHasContent(entryDataContent), convertToHasValues(externalIdValues));
     }
+
 
     /**
      * @param chainIdHex
@@ -320,7 +352,8 @@ public class Operations {
      * @return
      * @see #generateEntryID(String, HasContent, Collection)
      */
-    public String generateEntryID(String chainIdHex, Entry entry) {
+    public String generateEntryID(String chainIdHex,
+                                  Entry entry) {
         return generateEntryID(chainIdHex, entry.getEntryData(), entry.getEntryData().getExternalIds());
     }
 
@@ -336,7 +369,9 @@ public class Operations {
      * @param externalIds
      * @return
      */
-    public Result<byte[]> calculateEntryIdBaseFromBytes(String chainIdHex, byte[] entryData, Collection<byte[]> externalIds) {
+    public Result<byte[]> calculateEntryIdBaseFromBytes(String chainIdHex,
+                                                        byte[] entryData,
+                                                        Collection<byte[]> externalIds) {
         // add entryData has is the whole entryData as a byte string.
         // hash that with sha512
         // append the entrybytes to that 512 hash
@@ -349,6 +384,7 @@ public class Operations {
         return calculateEntryIdBase(chainIdHex, HasContent.Impl.of(entryData), externalIdsValues);
     }
 
+
     /**
      * An entryId base is calculated from the chain Id in hex form, the external Ids and the content of the entry!
      * If the chainId in hex form is ommited it will be calculated as if it is the first entry in a chain
@@ -360,7 +396,9 @@ public class Operations {
      * @param externalIds
      * @return
      */
-    public Result<byte[]> calculateEntryIdBase(String chainIdHex, HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
+    public Result<byte[]> calculateEntryIdBase(String chainIdHex,
+                                               HasContent<byte[]> entryData,
+                                               Collection<? extends HasValue<byte[]>> externalIds) {
         // add entryData has is the whole entryData as a byte string.
         // hash that with sha512
         // append the entrybytes to that 512 hash
@@ -369,27 +407,34 @@ public class Operations {
         return concat(digest.getSHA512Hash(entryBytes), entryBytes);
     }
 
+
     /**
      * @param chainIdHex
      * @param firstEntry
      * @return
      * @see #calculateEntryIdBase(String, HasContent, Collection)
      */
-    public Result<byte[]> calculateEntryIdBase(String chainIdHex, Entry firstEntry) {
+    public Result<byte[]> calculateEntryIdBase(String chainIdHex,
+                                               Entry firstEntry) {
         return calculateEntryIdBase(chainIdHex, firstEntry.getEntryData(), firstEntry.getEntryData().getExternalIds());
     }
 
 
-    public Result<byte[]> entryToBytes(HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
+    public Result<byte[]> entryToBytes(HasContent<byte[]> entryData,
+                                       Collection<? extends HasValue<byte[]>> externalIds) {
         return entryToBytes(null, entryData, externalIds);
     }
 
-    public Result<byte[]> entryToBytes(String chainIdHex, Entry entry) {
+
+    public Result<byte[]> entryToBytes(String chainIdHex,
+                                       Entry entry) {
         return entryToBytes(chainIdHex, entry.getEntryData(), entry.getEntryData().getExternalIds());
     }
 
 
-    public Result<byte[]> entryToBytes(String chainIdHex, HasContent<byte[]> entryData, Collection<? extends HasValue<byte[]>> externalIds) {
+    public Result<byte[]> entryToBytes(String chainIdHex,
+                                       HasContent<byte[]> entryData,
+                                       Collection<? extends HasValue<byte[]>> externalIds) {
         byte[] chainID;
         if (Utils.String.isNotEmpty(chainIdHex)) {
             chainID = fromHex(chainIdHex).original();
@@ -408,11 +453,14 @@ public class Operations {
         return new Result<>(bytes);
     }
 
-    protected Result<byte[]> chainToBytes(HasContent<byte[]> firstEntryData, Collection<? extends HasValue<byte[]>> externalIds) {
+
+    protected Result<byte[]> chainToBytes(HasContent<byte[]> firstEntryData,
+                                          Collection<? extends HasValue<byte[]>> externalIds) {
         byte[] chainID = calculateChainIdBase(externalIds).byteHash(Digest.Algorithm.SHA_256);
         byte[] entryBytes = entryToBytes(firstEntryData, externalIds).original();
         return concat(chainID, entryBytes);
     }
+
 
     protected Result<byte[]> externalIdsToBytes(Collection<? extends HasValue<byte[]>> externalIds) {
         if (externalIds == null || externalIds.isEmpty()) {
@@ -437,6 +485,7 @@ public class Operations {
         return new Result<>(bytes);
     }
 
+
     public Result<byte[]> currentTimeMillis() {
         long now = System.currentTimeMillis();
         ByteBuffer buffer = ByteBuffer.allocate(8);
@@ -456,6 +505,7 @@ public class Operations {
         };
     }
 
+
     public static <T> Collection<HasValue<T>> convertToHasValues(Collection<T> vals) {
         List<HasValue<T>> result = new ArrayList<>();
         if (!isEmpty(vals)) {
@@ -467,6 +517,7 @@ public class Operations {
 
     }
 
+
     public static <T> HasContent<T> convertToHasContent(T content) {
         return new HasContent<T>() {
             @Override
@@ -476,8 +527,10 @@ public class Operations {
         };
     }
 
+
     public class Result<T> implements HasValue<T>, HasContent<T> {
         private final T original;
+
 
         private Result(T result) {
             this.original = result;
@@ -487,6 +540,7 @@ public class Operations {
         private boolean isStringOriginal() {
             return original != null && String.class.isAssignableFrom(original.getClass());
         }
+
 
         private boolean isBytesOrignal() {
             // Only strings and bytes for now
@@ -498,15 +552,18 @@ public class Operations {
             return original;
         }
 
+
         @Override
         public T getContent() {
             return original();
         }
 
+
         @Override
         public T getValue() {
             return original();
         }
+
 
         public byte[] byteHash(Digest.Algorithm algorithm) {
             if (isBytesOrignal()) {
@@ -517,7 +574,9 @@ public class Operations {
             throw new RuntimeException("Cannot create hash without input");
         }
 
-        public String stringHash(Digest.Algorithm algorithm, Digest.Encoding encoding) {
+
+        public String stringHash(Digest.Algorithm algorithm,
+                                 Digest.Encoding encoding) {
             if (isBytesOrignal()) {
                 return digest.getHashAsString(algorithm, (byte[]) original, encoding);
             } else if (isStringOriginal()) {

@@ -31,8 +31,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @ApiModel(value = "Chain", description = "This is the Chain object itself. A chain is created with a first Entry. The chain Id is calculated from the firt Entry where the content part of the entry is omited during Chain ID calculation. After the chain is stored you can traverse the cahin using the API (not this object)")
 @XmlAccessorType(value = XmlAccessType.FIELD)
 public class Chain {
+
+    public Chain() {
+    }
+
+    public Chain(final Entry firstEntry) {
+        this.firstEntry = firstEntry;
+    }
+
     @XmlElement(name = "firstEntry", required = true)
-    @ApiModelProperty(notes = "The First Entry with which this Chain was created. Traverse the chain using the API (not this object)",required = true)
+    @ApiModelProperty(notes = "The First Entry with which this Chain was created. Traverse the chain using the API (not this object)", required = true)
     private Entry firstEntry;
 
 
@@ -40,9 +48,11 @@ public class Chain {
         return firstEntry;
     }
 
+
     public void setFirstEntry(Entry firstEntry) {
         this.firstEntry = firstEntry;
     }
+
 
     @Override
     public String toString() {

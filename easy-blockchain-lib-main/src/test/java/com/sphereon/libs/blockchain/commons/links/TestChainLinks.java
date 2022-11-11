@@ -25,6 +25,7 @@ public class TestChainLinks {
 
     private RegistrationTypeRegistry registry = RegistrationTypeRegistry.getInstance();
 
+
     @Test
     public void testAlfrescoRegistration() {
         registry.initSubsystem(Subsystem.Default.ALFRESCO);

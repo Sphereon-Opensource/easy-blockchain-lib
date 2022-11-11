@@ -80,7 +80,8 @@ public class Digest {
     }
 
 
-    public byte[] getHash(Algorithm algorithm, String input) {
+    public byte[] getHash(Algorithm algorithm,
+                          String input) {
         if (Utils.String.isEmpty(input)) {
             return new byte[]{};
         }
@@ -88,7 +89,8 @@ public class Digest {
     }
 
 
-    public byte[] getHash(Algorithm algorithm, byte[] input) {
+    public byte[] getHash(Algorithm algorithm,
+                          byte[] input) {
         try {
             return MessageDigest.getInstance(algorithm.getImplementation()).digest(input);
         } catch (NoSuchAlgorithmException e) {
@@ -97,13 +99,15 @@ public class Digest {
     }
 
 
-    public byte[] getHash(Algorithm algorithm, InputStream inputStream) {
+    public byte[] getHash(Algorithm algorithm,
+                          InputStream inputStream) {
         try {
             byte[] buffer = new byte[BUFFER_SIZE_8K];
             MessageDigest messageDigest = MessageDigest.getInstance(algorithm.getImplementation());
             try (DigestInputStream dis = new DigestInputStream(inputStream, messageDigest)) {
-                while (dis.read(buffer) != -1)
+                while (dis.read(buffer) != -1) {
                     ;
+                }
             }
             return messageDigest.digest();
         } catch (Exception e) {
@@ -112,13 +116,14 @@ public class Digest {
     }
 
 
-
-    public byte[] getHashAsHex(Algorithm algorithm, byte[] input) {
+    public byte[] getHashAsHex(Algorithm algorithm,
+                               byte[] input) {
         return getHashAsString(algorithm, input, Encoding.HEX).getBytes();
     }
 
 
-    public byte[] getHashAsHex(Algorithm algorithm, InputStream input) {
+    public byte[] getHashAsHex(Algorithm algorithm,
+                               InputStream input) {
         return getHashAsString(algorithm, input, Encoding.HEX).getBytes();
     }
 
@@ -133,7 +138,9 @@ public class Digest {
     }
 
 
-    public String getHashAsString(Algorithm algorithm, String input, Encoding encoding) {
+    public String getHashAsString(Algorithm algorithm,
+                                  String input,
+                                  Encoding encoding) {
         if (Utils.String.isEmpty(input)) {
             return "";
         }
@@ -142,7 +149,9 @@ public class Digest {
     }
 
 
-    public String getHashAsString(Algorithm algorithm, byte[] input, Encoding encoding) {
+    public String getHashAsString(Algorithm algorithm,
+                                  byte[] input,
+                                  Encoding encoding) {
         byte[] hash = getHash(algorithm, input);
         if (encoding == Encoding.UTF_8) {
             return new String(hash, Charset.forName("UTF-8"));
@@ -151,7 +160,10 @@ public class Digest {
         }
     }
 
-    public String getHashAsString(Algorithm algorithm, InputStream input, Encoding encoding) {
+
+    public String getHashAsString(Algorithm algorithm,
+                                  InputStream input,
+                                  Encoding encoding) {
         byte[] hash = getHash(algorithm, input);
         if (encoding == Encoding.UTF_8) {
             return new String(hash, Charset.forName("UTF-8"));
